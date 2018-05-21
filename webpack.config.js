@@ -35,13 +35,6 @@ const config = {
       onBuildStart:['echo "Webpack Start"'], 
       onBuildEnd:["gulp post-bundle"]})
   ],
-  devServer: {
-    contentBase: path.resolve(__dirname, "./dist"),
-    compress: true,
-    port: 12003,
-    stats: 'errors-only',
-    open: true
-  },
   devtool: 'inline-source-map',
   module: {
     rules: [
@@ -68,27 +61,14 @@ const config = {
         ],
       },
       {
-        // copy the manifest
-        test: /(\.json)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: './assets/media/',
-            }
-          }
-        ]
-      },
-      {
         test: /\.(jpg|png|gif|svg|ico)$/,
         use: [
           {
             loader: 'file-loader',
             options: {
               name: '[name].[ext]',
-              outputPath: './assets/media/',
-              publicPath: './assets/media/'
+              outputPath: './popup/media/',
+              publicPath: 'media'
             }
           }
         ]

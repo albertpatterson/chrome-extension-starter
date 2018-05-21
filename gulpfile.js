@@ -5,12 +5,12 @@ const connect = require('gulp-connect');
 const livereload = require('gulp-livereload');
 const run = require('gulp-run');
 
-
 const port = 3000;
 const paths = {
   distDir: "dist",
   srcDir: "src",
   manifestFile: "manifest.json",
+  icon: "icon.png"
 };
 
 // connects the server at given port and root.
@@ -25,18 +25,17 @@ gulp.task('connect', () => {
 
 gulp.task('listen', ()=>{
   livereload.listen();
-})
+});
 
 gulp.task('connect-and-listen', ()=>{
   runSequence('connect', 'listen');
-})
+});
 
 gulp.task('copy-manifest', () => {
-  return gulp.src([
-    path.resolve(__dirname, paths.srcDir, paths.manifestFile)
-    ], {
-      base: paths.srcDir
-    })
+  return gulp.src(
+    [ path.resolve(__dirname, paths.srcDir, paths.manifestFile),
+      path.resolve(__dirname, paths.srcDir, paths.icon)],
+    { base: paths.srcDir})
     .pipe(gulp.dest(path.resolve(__dirname, paths.distDir)));
 });
 
@@ -50,9 +49,9 @@ gulp.task('post-bundle', ()=>{
 
 // use gulp-run in the middle of a pipeline:
 gulp.task('rebuild', function() {
-  return run("npm run buildw").exec();
+  return run(`npm run build`).exec();
 });
 
 gulp.task('watch', ()=>{
   gulp.watch(["src/**/*"], ['rebuild']);
-})
+});

@@ -1,1 +1,1 @@
-console.log("hello from dependency updated again extra junk");
+console.log("hello from dependency");
