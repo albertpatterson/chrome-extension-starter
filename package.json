@@ -4,10 +4,11 @@
   "description": "seed for a web app",
   "main": "index.js",
   "scripts": {
-    "build": "NODE_ENV='production' ./node_modules/.bin/webpack -p",
-    "buildw": "set NODE_ENV=production&& webpack --config webpack.config",
-    "watch": "./node_modules/.bin/webpack --watch",
-    "dev": "./node_modules/.bin/webpack-dev-server -d"
+    "build": "./node_modules/.bin/webpack",
+    "buildProd": "NODE_ENV='production' ./node_modules/.bin/webpack -p",
+    "buildwProd": "set NODE_ENV=production&& webpack --config webpack.config",
+    "watch": "gulp watch",
+    "connect-and-listen": "gulp connect-and-listen"
   },
   "author": "",
   "license": "ISC",
