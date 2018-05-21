@@ -7,4 +7,4 @@
  *   
  *   If you do not have background feature in your extension, remove this script  from manifest.json and src folder.
  */
-
+require("../util/sayHello");

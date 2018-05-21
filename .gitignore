@@ -1,4 +1,7 @@
-bower_components/
-node_modules/
+.idea
+*.iml
+.DS_store
+node_modules
 dist
-package
+junk
+package-lock.json

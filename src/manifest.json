@@ -4,19 +4,19 @@
     "manifest_version": 2,
     "browser_action": {
         "default_title": "Chrome Extension Seed",
-        "default_popup": "popup.html"
+        "default_popup": "popup/popup.html"
     },
     "background": {
         "scripts": [
-            "scripts/chromereload.js",
-            "scripts/background.js"
+            "background/background.js",
+            "background/chromereload.js"
         ],
         "persistent": false
     },
     "content_scripts": [
         {
             "matches": ["https://*/*", "http://*/*"],
-            "js": ["scripts/contentscript.js"]
+            "js": ["injected/injected.js"]
         }
     ]
 }
