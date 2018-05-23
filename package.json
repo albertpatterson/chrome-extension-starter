@@ -4,9 +4,8 @@
   "description": "seed for a web app",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/.bin/webpack",
-    "buildProd": "NODE_ENV='production' ./node_modules/.bin/webpack -p",
-    "buildwProd": "set NODE_ENV=production&& webpack --config webpack.config",
+    "build": "./node_modules/.bin/webpack --config webpack.prod.js",
+    "build-dev": "./node_modules/.bin/webpack --config webpack.dev.js",
     "watch": "gulp watch",
     "connect-and-listen": "gulp connect-and-listen"
   },
@@ -15,6 +14,7 @@
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
+    "babel-minify-webpack-plugin": "^0.3.1",
     "babel-preset-env": "^1.6.1",
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^0.28.11",
@@ -28,12 +28,14 @@
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.0",
     "node-sass": "^4.9.0",
+    "optimize-css-assets-webpack-plugin": "^4.0.1",
     "run-sequence": "^2.2.1",
     "sass-loader": "^7.0.1",
     "style-loader": "^0.21.0",
     "webpack": "^4.8.1",
     "webpack-cli": "^2.1.3",
     "webpack-dev-server": "^3.1.4",
+    "webpack-merge": "^4.1.2",
     "webpack-shell-plugin": "^0.5.0"
   }
 }

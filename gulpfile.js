@@ -49,7 +49,7 @@ gulp.task('post-bundle', ()=>{
 
 // use gulp-run in the middle of a pipeline:
 gulp.task('rebuild', function() {
-  return run(`npm run build`).exec();
+  return run(`npm run build-dev`).exec();
 });
 
 gulp.task('watch', ()=>{

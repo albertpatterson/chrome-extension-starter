@@ -1,14 +1,7 @@
-
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const WebpackShellPlugin = require('webpack-shell-plugin');
-const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin');
 
-const devMode = process.env.NODE_ENV !== 'production';
-
-const config = {
+module.exports = {
   context: path.resolve(__dirname, 'src'),
   entry: {
     'background/background': './background/background.js',
@@ -22,20 +15,7 @@ const config = {
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
-    new HtmlWebpackPlugin({
-      template: 'popup/popup.html',
-      filename: 'popup/popup.html',
-      excludeAssets: [/(background)|(injected)/]
-    }),
-    new HtmlWebpackExcludeAssetsPlugin(),
-    new MiniCssExtractPlugin({
-      filename: 'popup/css/popup.css'
-    }),
-    new WebpackShellPlugin({
-      onBuildStart:['echo "Webpack Start"'], 
-      onBuildEnd:["gulp post-bundle"]})
   ],
-  devtool: 'inline-source-map',
   module: {
     rules: [
       {
@@ -54,13 +34,6 @@ const config = {
         use: ['html-loader']
       },
       {
-        test:/\.scss$/,
-        use: [
-          devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader', 'sass-loader'
-        ],
-      },
-      {
         test: /\.(jpg|png|gif|svg|ico)$/,
         use: [
           {
@@ -68,7 +41,7 @@ const config = {
             options: {
               name: '[name].[ext]',
               outputPath: './popup/media/',
-              publicPath: 'media'
+              publicPath: '/popup/media'
             }
           }
         ]
@@ -76,5 +49,3 @@ const config = {
     ]
   }
 };
-
-module.exports = config;
