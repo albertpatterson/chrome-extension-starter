@@ -31,20 +31,8 @@ gulp.task('connect-and-listen', ()=>{
   runSequence('connect', 'listen');
 });
 
-gulp.task('copy-manifest', () => {
-  return gulp.src(
-    [ path.resolve(__dirname, paths.srcDir, paths.manifestFile),
-      path.resolve(__dirname, paths.srcDir, paths.icon)],
-    { base: paths.srcDir})
-    .pipe(gulp.dest(path.resolve(__dirname, paths.distDir)));
-});
-
 gulp.task('reload', function(){
   livereload.reload();
-});
-
-gulp.task('post-bundle', ()=>{
-  runSequence('copy-manifest', 'reload')
 });
 
 // use gulp-run in the middle of a pipeline:

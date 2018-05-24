@@ -12,10 +12,7 @@
   },
 
   "background": {
-    "scripts": [
-      "background/background.js",
-      "background/chromereload.js"
-    ],
+    "scripts": "*** Background Scripts ***",
     "persistent": false
   },
   "commands": {},
