@@ -4,10 +4,11 @@ const runSequence = require('run-sequence');
 const connect = require('gulp-connect');
 const livereload = require('gulp-livereload');
 const run = require('gulp-run');
+const gzip = require('gulp-zip');
 
 const port = 3000;
 const paths = {
-  distDir: "dist",
+  distDir: "dist/unpacked",
   srcDir: "src",
   manifestFile: "manifest.json",
   icon: "icon.png"
@@ -43,3 +44,9 @@ gulp.task('rebuild', function() {
 gulp.task('watch', ()=>{
   gulp.watch(["src/**/*"], ['rebuild']);
 });
+
+gulp.task('zip', function(){
+  gulp.src(['dist/unpacked/**'])
+  .pipe(gzip('extension.zip'))
+  .pipe(gulp.dest('dist'))
+})

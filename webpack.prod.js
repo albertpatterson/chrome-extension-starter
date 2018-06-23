@@ -3,6 +3,7 @@ const buildResources = require("./buildResources");
 const MinifyPlugin = require("babel-minify-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const WebpackShellPlugin = require('webpack-shell-plugin');
 
 const manifestTransforms = {
   "Background Scripts": ["background/background.js"]
@@ -22,9 +23,12 @@ module.exports = merge(buildResources.commonConfig, {
       minify: {
         collapseWhitespace: true,
         preserveLineBreaks: true,
-        removeComments: true,
+        removeComments: true
       }
     }),
+    new WebpackShellPlugin({
+      onBuildEnd:["gulp zip"]
+    })
   ],
   module: buildResources.createSCSSModule(MiniCssExtractPlugin.loader)
 });

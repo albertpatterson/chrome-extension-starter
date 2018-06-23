@@ -7,7 +7,7 @@ const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plug
 module.exports.commonConfig = {
   context: path.resolve(__dirname, 'src'),
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist', 'unpacked'),
     filename: '[name].js',
   },
   plugins: [
@@ -64,11 +64,12 @@ module.exports.createCopyManifestAndResourcesPlugin = function(map) {
     from: "manifest.json",
     transform: manifestTransformation(map)
   }, {
-    from: "icon.png",
+    from: "icon.png"
   }]);
 };
 
 function manifestTransformation(map){
+  // todo handle case where a match is split across buffers
   return function(buffer){
     let text = buffer.toString();
     Object.getOwnPropertyNames(map).forEach(key=>{

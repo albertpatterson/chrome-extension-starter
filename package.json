@@ -9,7 +9,11 @@
     "watch": "gulp watch",
     "connect-and-listen": "gulp connect-and-listen"
   },
-  "author": "",
+  "author": "Albert Patterson",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/albertpatterson/webpack-chrome-extension-seed.git"
+  },
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -24,6 +28,7 @@
     "gulp-connect": "^5.5.0",
     "gulp-livereload": "^3.8.1",
     "gulp-run": "^1.7.1",
+    "gulp-zip": "^4.1.0",
     "html-loader": "^0.5.5",
     "html-webpack-exclude-assets-plugin": "0.0.7",
     "html-webpack-plugin": "^3.2.0",
