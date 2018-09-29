@@ -1,4 +1,4 @@
-# firebase-auth-seed
+# Webpack-Chrome-Extension-Seed
 a seed for a chrome extension using webpack
 
 ## Usage
