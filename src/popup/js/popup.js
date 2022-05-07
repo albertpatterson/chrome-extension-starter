@@ -1,3 +1,4 @@
-import "../scss/popup.scss";
+import '../scss/popup.scss';
 
-require("../../util/sayHello");
+require('../../util/sayHello');
+console.log('hello from popup!!!');

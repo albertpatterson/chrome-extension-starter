@@ -1,34 +1,29 @@
-const merge = require("webpack-merge");
-const buildResources = require("./buildResources");
-const MinifyPlugin = require("babel-minify-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const { merge } = require('webpack-merge');
+const buildResources = require('./buildResources');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 
 const manifestTransforms = {
-  "Background Scripts": ["background/background.js"]
+  'Background Scripts': ['background/background.js'],
 };
 
 module.exports = merge(buildResources.commonConfig, {
-  mode: "production",
+  mode: 'production',
   entry: buildResources.createEntries(),
   plugins: [
     buildResources.createCopyManifestAndResourcesPlugin(manifestTransforms),
-    new MinifyPlugin(),
     new MiniCssExtractPlugin({
-      filename: 'popup/css/popup_[hash].css'
+      filename: 'popup/css/popup_[fullhash].css',
     }),
-    new OptimizeCSSAssetsPlugin({}),
+    new CssMinimizerPlugin(),
     ...buildResources.createHtmlWebpackPlugin({
       minify: {
         collapseWhitespace: true,
         preserveLineBreaks: true,
-        removeComments: true
-      }
+        removeComments: true,
+      },
     }),
-    new WebpackShellPlugin({
-      onBuildEnd:["gulp zip"]
-    })
   ],
-  module: buildResources.createSCSSModule(MiniCssExtractPlugin.loader)
+  module: buildResources.createSCSSModule(MiniCssExtractPlugin.loader),
 });
