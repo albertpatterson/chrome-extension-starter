@@ -43,12 +43,6 @@ function bundleDev() {
   return bundle(webpackDevConfig);
 }
 
-function createLogger(msg) {
-  return async function () {
-    console.log(msg);
-  };
-}
-
 function zip() {
   return gulp
     .src(['dist/unpacked/**'])
@@ -56,7 +50,7 @@ function zip() {
     .pipe(gulp.dest('dist'));
 }
 
-gulp.task('build prod', gulp.series(rmDist, bundleProd, zip));
+gulp.task('build-prod', gulp.series(rmDist, bundleProd, zip));
 
 // connects the server at given port and root.
 // enables the live reloading.
@@ -77,14 +71,14 @@ function reload(done) {
   done();
 }
 
-gulp.task('dev', gulp.series(rmDist, bundleDev));
+gulp.task('build-dev', gulp.series(rmDist, bundleDev));
 
 gulp.task('dev-watch', () =>
   gulp.watch(['src/**'], gulp.series(rmDist, bundleDev))
 );
 
 gulp.task('dev-watch-reload', () =>
-  gulp.watch(['src/**'], gulp.series(rmDist, bundleDev, reload))
+  gulp.parallel(listen, connectServer, () =>
+    gulp.watch(['src/**'], gulp.series(rmDist, bundleDev, reload))
+  )
 );
-
-gulp.task('listen-for-reload', gulp.series(listen, connectServer));

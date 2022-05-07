@@ -2,7 +2,6 @@ const { merge } = require('webpack-merge');
 const buildResources = require('./buildResources');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const WebpackShellPlugin = require('webpack-shell-plugin');
 
 const manifestTransforms = {
   'Background Scripts': ['background/background.js'],

@@ -1,2 +1,2 @@
 require('../util/sayHello');
-console.log('hello from background!!!');
+console.log('hello from background');

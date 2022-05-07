@@ -1,7 +1,5 @@
-const path = require('path');
 const { merge } = require('webpack-merge');
 const buildResources = require('./buildResources');
-const WebpackShellPlugin = require('webpack-shell-plugin');
 
 const manifestTransforms = {
   'Background Scripts': [
