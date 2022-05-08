@@ -1,17 +1,17 @@
 const { merge } = require('webpack-merge');
-const buildResources = require('./webpack.common');
+const buildResources = require('./webpack.page.common');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
-const manifestTransforms = {
-  'Background Scripts': ['background/background.js'],
-};
+// const manifestTransforms = {
+//   'Background Scripts': ['background/background.js'],
+// };
 
 module.exports = merge(buildResources.commonConfig, {
   mode: 'production',
   entry: buildResources.createEntries(),
   plugins: [
-    buildResources.createCopyManifestAndResourcesPlugin(manifestTransforms),
+    // buildResources.createCopyManifestAndResourcesPlugin(manifestTransforms),
     new MiniCssExtractPlugin({
       filename: 'popup/css/popup_[fullhash].css',
     }),

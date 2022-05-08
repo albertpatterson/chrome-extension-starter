@@ -4,10 +4,9 @@
   "description": "seed for a web app",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/.bin/webpack --config webpack.prod.js",
-    "build-dev": "./node_modules/.bin/webpack --config webpack.dev.js",
-    "watch": "gulp watch",
-    "connect-and-listen": "gulp connect-and-listen"
+    "build": "gulp build-prod",
+    "build-dev": "gulp build-dev",
+    "watch": "gulp dev-watch-reload"
   },
   "author": "Albert Patterson",
   "repository": {
@@ -38,6 +37,7 @@
     "sass": "^1.51.0",
     "sass-loader": "^12.6.0",
     "style-loader": "^3.3.1",
+    "through2": "^4.0.2",
     "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.9.0",
