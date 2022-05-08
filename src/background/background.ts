@@ -1,3 +1,4 @@
 import { getMessage } from '../util/message';
-console.log(getMessage());
+const utilMessage: string = getMessage();
+console.log(utilMessage);
 console.log('hello from background');

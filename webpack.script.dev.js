@@ -5,6 +5,6 @@ module.exports = merge(buildResources.commonConfig, {
   mode: 'development',
   devtool: 'inline-source-map',
   entry: buildResources.createEntries({
-    'background/chromereload': './background/chromereload.js',
+    'background/chromereload': './background/chromereload.ts',
   }),
 });

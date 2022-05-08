@@ -8,6 +8,9 @@ module.exports.commonConfig = {
     filename: '[name].js',
     assetModuleFilename: 'images/[hash][ext][query]',
   },
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
   plugins: [],
   module: {
     rules: [
@@ -23,6 +26,11 @@ module.exports.commonConfig = {
         },
       },
       {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
         test: /\.html$/,
         use: ['html-loader'],
       },
@@ -36,7 +44,7 @@ module.exports.commonConfig = {
 
 module.exports.createEntries = function (extraEntries) {
   const entries = {
-    'popup/js/popup': './popup/js/popup.js',
+    'popup/js/popup': './popup/js/popup.ts',
   };
   if (extraEntries) Object.assign(entries, extraEntries);
   return entries;

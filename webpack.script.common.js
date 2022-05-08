@@ -6,6 +6,9 @@ module.exports.commonConfig = {
     path: path.resolve(__dirname, 'dist', 'unpacked'),
     filename: '[name].js',
   },
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
   plugins: [],
   module: {
     rules: [
@@ -20,14 +23,19 @@ module.exports.commonConfig = {
           },
         },
       },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
     ],
   },
 };
 
 module.exports.createEntries = function (extraEntries) {
   const entries = {
-    'background/background': './background/background.js',
-    'injected/injected': './injected/injected.js',
+    'background/background': './background/background.ts',
+    'injected/injected': './injected/injected.ts',
   };
   if (extraEntries) Object.assign(entries, extraEntries);
   return entries;
