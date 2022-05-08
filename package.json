@@ -6,7 +6,9 @@
   "scripts": {
     "build": "gulp build-prod",
     "build-dev": "gulp build-dev",
-    "watch": "gulp dev-watch-reload"
+    "watch": "gulp dev-watch-reload",
+    "test": "jest",
+    "watch-watch": "jest --watch"
   },
   "author": "Albert Patterson",
   "repository": {
@@ -30,6 +32,8 @@
     "html-loader": "^3.1.0",
     "html-webpack-exclude-assets-plugin": "0.0.7",
     "html-webpack-plugin": "^5.5.0",
+    "jest": "^28.1.0",
+    "jest-environment-jsdom": "^28.1.0",
     "mini-css-extract-plugin": "^2.6.0",
     "optimize-css-assets-webpack-plugin": "^4.0.1",
     "rimraf": "^3.0.2",
@@ -43,5 +47,8 @@
     "webpack-dev-server": "^4.9.0",
     "webpack-merge": "^5.8.0",
     "webpack-stream": "^7.0.0"
+  },
+  "dependencies": {
+    "@types/jest": "^27.5.0"
   }
 }

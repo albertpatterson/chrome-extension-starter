@@ -1,2 +1,3 @@
-require('../util/sayHello');
+import { getMessage } from '../util/message';
+console.log(getMessage());
 console.log('hello from injected');

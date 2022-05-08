@@ -1,4 +1,4 @@
 import '../scss/popup.scss';
 
-require('../../util/sayHello');
+require('../../util/message');
 console.log('hello from popup!!!');
