@@ -1,5 +1,5 @@
 const { merge } = require('webpack-merge');
-const buildResources = require('./buildResources');
+const buildResources = require('./webpack.common');
 
 const manifestTransforms = {
   'Background Scripts': [
