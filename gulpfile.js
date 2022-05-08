@@ -5,7 +5,6 @@ const rimraf = require('rimraf');
 const gzip = require('gulp-zip');
 const connect = require('gulp-connect');
 const livereload = require('gulp-livereload');
-const through = require('through2');
 const webpackScriptDevConfig = require('./webpack.script.dev');
 const webpackScriptProdConfig = require('./webpack.script.prod');
 const webpackPageDevConfig = require('./webpack.page.dev');
@@ -55,54 +54,55 @@ function reload(done) {
   done();
 }
 
-function replaceWithJSON(text, search, replacement) {
-  const json = JSON.stringify(replacement);
-  return text.replace(
-    new RegExp(`[\"\']\\*\\*\\* ${search} \\*\\*\\*[\"\']`, 'g'),
-    json
-  );
+function copyRootArtifacts() {
+  return gulp
+    .src(['./src/manifest.json', './src/icon.png'])
+    .pipe(gulp.dest('dist/unpacked'));
 }
 
-function copyManifest(isProd) {
-  return function copyManifest() {
-    const backgroundScripts = isProd
-      ? ['background/background.js']
-      : ['background/background.js', 'background/chromereload.js'];
+const bundleServiceWorker = (isProd) => {
+  const prodSrcs = ['./src/background/service_worker.ts'];
+  const srcs = isProd
+    ? prodSrcs
+    : [...prodSrcs, './src/background/dev_mode_only/chromereload.ts'];
 
-    return gulp
-      .src('./src/manifest.json')
-      .pipe(
-        through.obj((chunk, enc, cb) => {
-          const trans = chunk.clone();
-
-          const orig = chunk.contents.toString();
-
-          trans.contents = Buffer.from(
-            replaceWithJSON(orig, 'Background Scripts', backgroundScripts)
-          );
-
-          cb(null, trans);
-        })
-      )
-      .pipe(gulp.dest('dist/unpacked'));
-  };
-}
-
-function copyIcon() {
-  return gulp.src('./src/icon.png').pipe(gulp.dest('dist/unpacked'));
-}
-
-function bundleScripts(isProd) {
   const config = isProd ? webpackScriptProdConfig : webpackScriptDevConfig;
 
-  return function bundleScripts() {
-    return new Promise((res, rej) => {
-      webpack(config)
-        .pipe(gulp.dest(`dist/unpacked`))
-        .on('end', res)
-        .on('error', rej);
-    });
+  return function bundleServiceWorker() {
+    return gulp
+      .src(srcs)
+      .pipe(
+        webpack({
+          ...config,
+          output: {
+            filename: 'service_worker.js',
+          },
+        })
+      )
+      .pipe(gulp.dest('dist/unpacked/background'));
   };
+};
+
+const bundleInjected = (isProd) => {
+  const config = isProd ? webpackScriptProdConfig : webpackScriptDevConfig;
+
+  return function bundleInjected() {
+    return gulp
+      .src(['./src/injected/injected.ts'])
+      .pipe(
+        webpack({
+          ...config,
+          output: {
+            filename: 'injected.js',
+          },
+        })
+      )
+      .pipe(gulp.dest('dist/unpacked/injected'));
+  };
+};
+
+function bundleScripts(isProd) {
+  return gulp.parallel(bundleServiceWorker(isProd), bundleInjected(isProd));
 }
 
 function bundlePage(isProd) {
@@ -120,22 +120,12 @@ function bundlePage(isProd) {
 
 const buildDev = gulp.series(
   rmDist,
-  gulp.parallel(
-    copyIcon,
-    copyManifest(false),
-    bundleScripts(false),
-    bundlePage(false)
-  )
+  gulp.parallel(copyRootArtifacts, bundleScripts(false), bundlePage(false))
 );
 
 const buildProd = gulp.series(
   rmDist,
-  gulp.parallel(
-    copyIcon,
-    copyManifest(true),
-    bundleScripts(true),
-    bundlePage(true)
-  )
+  gulp.parallel(copyRootArtifacts, bundleScripts(true), bundlePage(true))
 );
 
 gulp.task('build-dev', buildDev);

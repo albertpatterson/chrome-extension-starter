@@ -2,10 +2,6 @@ const path = require('path');
 
 module.exports.commonConfig = {
   context: path.resolve(__dirname, 'src'),
-  output: {
-    path: path.resolve(__dirname, 'dist', 'unpacked'),
-    filename: '[name].js',
-  },
   resolve: {
     extensions: ['.ts', '.js'],
   },
@@ -30,13 +26,4 @@ module.exports.commonConfig = {
       },
     ],
   },
-};
-
-module.exports.createEntries = function (extraEntries) {
-  const entries = {
-    'background/background': './background/background.ts',
-    'injected/injected': './injected/injected.ts',
-  };
-  if (extraEntries) Object.assign(entries, extraEntries);
-  return entries;
 };
