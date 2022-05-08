@@ -1,7 +1,5 @@
 const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin');
 
 module.exports.commonConfig = {
   context: path.resolve(__dirname, 'src'),
@@ -38,46 +36,11 @@ module.exports.commonConfig = {
 
 module.exports.createEntries = function (extraEntries) {
   const entries = {
-    // 'background/background': './background/background.js',
-    // 'injected/injected': './injected/injected.js',
     'popup/js/popup': './popup/js/popup.js',
   };
   if (extraEntries) Object.assign(entries, extraEntries);
   return entries;
 };
-
-// module.exports.createCopyManifestAndResourcesPlugin = function (map) {
-//   return new CopyWebpackPlugin({
-//     patterns: [
-//       {
-//         from: 'manifest.json',
-//         transform: manifestTransformation(map),
-//       },
-//       {
-//         from: 'icon.png',
-//       },
-//     ],
-//   });
-// };
-
-// function manifestTransformation(map) {
-//   // todo handle case where a match is split across buffers
-//   return function (buffer) {
-//     let text = buffer.toString();
-//     Object.getOwnPropertyNames(map).forEach((key) => {
-//       text = replaceWithJSON(text, key, map[key]);
-//     });
-//     return text;
-//   };
-// }
-
-// function replaceWithJSON(text, search, replacement) {
-//   const json = JSON.stringify(replacement);
-//   return text.replace(
-//     new RegExp(`[\"\']\\*\\*\\* ${search} \\*\\*\\*[\"\']`, 'g'),
-//     json
-//   );
-// }
 
 module.exports.createHtmlWebpackPlugin = function (opts) {
   const config = {
@@ -86,10 +49,7 @@ module.exports.createHtmlWebpackPlugin = function (opts) {
     excludeAssets: [/(background)|(injected)/],
   };
   if (opts) Object.assign(config, opts);
-  return [
-    new HtmlWebpackPlugin(config),
-    // new HtmlWebpackExcludeAssetsPlugin()
-  ];
+  return [new HtmlWebpackPlugin(config)];
 };
 
 module.exports.createSCSSModule = function (cssLoader) {
