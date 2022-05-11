@@ -1,7 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { getTSRules } = require('./ts_compiler_options');
 
-module.exports.commonConfig = {
+module.exports.getCommonConfig = (isProd) => ({
   context: path.resolve(__dirname, 'src'),
   output: {
     path: path.resolve(__dirname, 'dist', 'unpacked'),
@@ -14,22 +15,7 @@ module.exports.commonConfig = {
   plugins: [],
   module: {
     rules: [
-      {
-        test: /\.js$/,
-        include: /src/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-          },
-        },
-      },
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
+      ...getTSRules(isProd),
       {
         test: /\.html$/,
         use: ['html-loader'],
@@ -40,7 +26,7 @@ module.exports.commonConfig = {
       },
     ],
   },
-};
+});
 
 module.exports.createEntries = function (extraEntries) {
   const entries = {

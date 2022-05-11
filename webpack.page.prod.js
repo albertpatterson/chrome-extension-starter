@@ -3,7 +3,7 @@ const buildResources = require('./webpack.page.common');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-module.exports = merge(buildResources.commonConfig, {
+module.exports = merge(buildResources.getCommonConfig(true), {
   mode: 'production',
   entry: buildResources.createEntries(),
   plugins: [
