@@ -3,9 +3,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { getTSRules } = require('./ts_compiler_options');
 
 module.exports.getCommonConfig = (isProd) => ({
-  context: path.resolve(__dirname, 'src'),
+  context: path.resolve(__dirname, '../src'),
   output: {
-    path: path.resolve(__dirname, 'dist', 'unpacked'),
+    path: path.resolve(__dirname, '../dist', 'unpacked'),
     filename: '[name].js',
     assetModuleFilename: 'images/[hash][ext][query]',
   },

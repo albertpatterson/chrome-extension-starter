@@ -1,3 +1,5 @@
+const messages = ['hello', 'from', 'util'];
+
 export function getMessage(): string {
-  return 'hello world from util';
+  return messages.join(' ');
 }

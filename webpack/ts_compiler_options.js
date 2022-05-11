@@ -1,4 +1,4 @@
-const PROD_TS_COMPILER_OPTIONS = require('./tsconfig.json').compilerOptions;
+const PROD_TS_COMPILER_OPTIONS = require('../tsconfig.json').compilerOptions;
 
 function getCompilerOptions(isProd) {
   if (isProd) {

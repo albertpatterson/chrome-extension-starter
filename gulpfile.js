@@ -5,10 +5,10 @@ const rimraf = require('rimraf');
 const gzip = require('gulp-zip');
 const connect = require('gulp-connect');
 const livereload = require('gulp-livereload');
-const webpackScriptDevConfig = require('./webpack.script.dev');
-const webpackScriptProdConfig = require('./webpack.script.prod');
-const webpackPageDevConfig = require('./webpack.page.dev');
-const webpackPageProdConfig = require('./webpack.page.prod');
+const webpackScriptDevConfig = require('./webpack/webpack.script.dev');
+const webpackScriptProdConfig = require('./webpack/webpack.script.prod');
+const webpackPageDevConfig = require('./webpack/webpack.page.dev');
+const webpackPageProdConfig = require('./webpack/webpack.page.prod');
 
 const DIST_PATH = path.resolve(__dirname, 'dist');
 
