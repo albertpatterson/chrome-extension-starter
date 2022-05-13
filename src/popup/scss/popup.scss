@@ -1,6 +1,21 @@
 body {
-  height: 150px;
-  width: 150px;
-  background-image: url('../media/background.png');
-  background-size: 100% 100%;
+  width: 400px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 570px;
+}
+
+#search-input {
+  width: 90%;
+}
+
+#bookmark-list-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.bookmark-list-item {
+  margin: 5px 0px;
 }
