@@ -22,5 +22,5 @@
     }
   ],
   "homepage_url": "https://github.com/albertpatterson/webpack-chrome-extension-seed",
-  "permissions": ["bookmarks"]
+  "permissions": []
 }
