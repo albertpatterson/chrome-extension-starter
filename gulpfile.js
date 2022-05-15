@@ -9,8 +9,8 @@ const webpackScriptDevConfig = require('./webpack/webpack.script.dev');
 const webpackScriptProdConfig = require('./webpack/webpack.script.prod');
 const webpackPageDevConfig = require('./webpack/webpack.page.dev');
 const webpackPageProdConfig = require('./webpack/webpack.page.prod');
-
 const DIST_PATH = path.resolve(__dirname, 'dist');
+const through2 = require('through2');
 
 function rmDir(dirPath) {
   return new Promise((res, rej) => {
@@ -54,17 +54,48 @@ function reload(done) {
   done();
 }
 
-function copyRootArtifacts() {
-  return gulp
-    .src(['./src/manifest.json', './src/icon.png'])
-    .pipe(gulp.dest('dist/unpacked'));
+function copyManifest(isProd) {
+  const devPermissions = ['alarms'];
+
+  return function copyManifest() {
+    return gulp
+      .src('./src/manifest.json')
+      .pipe(
+        through2.obj((chunk, enc, callback) => {
+          const trans = chunk.clone();
+
+          const manifest = JSON.parse(trans.contents.toString());
+          const prodPermissions = manifest.permissions || [];
+          const permissions = isProd
+            ? prodPermissions
+            : Array.from(new Set([...prodPermissions, ...devPermissions]));
+          manifest.permissions = permissions;
+
+          trans.contents = Buffer.from(JSON.stringify(manifest));
+
+          callback(null, trans);
+        })
+      )
+      .pipe(gulp.dest('dist/unpacked'));
+  };
 }
+
+function copyIcon() {
+  return gulp.src(['./src/icon.png']).pipe(gulp.dest('dist/unpacked'));
+}
+
+function copyRootArtifacts(isProd) {
+  return gulp.parallel(copyIcon, copyManifest(isProd));
+}
+
+const EXTRA_DEV_FILES = [
+  './src/background/dev_mode_only/chromereload.ts',
+  './src/background/dev_mode_only/keep_active.ts',
+];
 
 const bundleServiceWorker = (isProd) => {
   const prodSrcs = ['./src/background/service_worker.ts'];
-  const srcs = isProd
-    ? prodSrcs
-    : [...prodSrcs, './src/background/dev_mode_only/chromereload.ts'];
+  const srcs = isProd ? prodSrcs : [...prodSrcs, ...EXTRA_DEV_FILES];
 
   const config = isProd ? webpackScriptProdConfig : webpackScriptDevConfig;
 
@@ -120,12 +151,16 @@ function bundlePage(isProd) {
 
 const buildDev = gulp.series(
   rmDist,
-  gulp.parallel(copyRootArtifacts, bundleScripts(false), bundlePage(false))
+  gulp.parallel(
+    copyRootArtifacts(false),
+    bundleScripts(false),
+    bundlePage(false)
+  )
 );
 
 const buildProd = gulp.series(
   rmDist,
-  gulp.parallel(copyRootArtifacts, bundleScripts(true), bundlePage(true))
+  gulp.parallel(copyRootArtifacts(true), bundleScripts(true), bundlePage(true))
 );
 
 gulp.task('build-dev', buildDev);
