@@ -13,12 +13,36 @@ const DIST_PATH = path.resolve(__dirname, 'dist');
 const through2 = require('through2');
 const fs = require('fs');
 
-const INJECTED_SCRIPT_DIR = path.resolve(__dirname, 'src/injected');
+const INJECTED_SCRIPT_DIR = path.resolve(__dirname, 'src', 'injected');
+const BACKGROUND_PROD_FILES_DIR = path.resolve(__dirname, 'src', 'background');
+const BACKGROUND_EXTRA_DEV_FILES_DIR = path.resolve(
+  BACKGROUND_PROD_FILES_DIR,
+  'dev_mode_only'
+);
 
-async function readdirFull(dir) {
-  const files = await fs.promises.readdir(dir);
+async function readdirFull(dir, filesOnly) {
+  const allContents = await fs.promises.readdir(dir);
 
-  return files.map((file) => path.resolve(dir, file));
+  const allFullPaths = allContents.map((file) => path.resolve(dir, file));
+
+  if (filesOnly) {
+    const fullPathDirTests = await Promise.all(
+      allFullPaths.map(async (fullPath) => {
+        const stats = await fs.promises.stat(fullPath);
+        return { fullPath, isDir: stats.isDirectory() };
+      })
+    );
+
+    const files = [];
+    for (const fullPathDirTest of fullPathDirTests) {
+      if (!fullPathDirTest.isDir) {
+        files.push(fullPathDirTest.fullPath);
+      }
+    }
+    return files;
+  }
+
+  return allFullPaths;
 }
 
 function taskToPromise(task) {
@@ -118,23 +142,33 @@ const EXTRA_DEV_FILES = [
 ];
 
 const bundleServiceWorker = (isProd) => {
-  const prodSrcs = ['./src/background/service_worker.ts'];
-  const srcs = isProd ? prodSrcs : [...prodSrcs, ...EXTRA_DEV_FILES];
+  return async function bundleServiceWorker() {
+    const srcs = await readdirFull(BACKGROUND_PROD_FILES_DIR, true);
 
-  const config = isProd ? webpackScriptProdConfig : webpackScriptDevConfig;
+    if (!isProd) {
+      const extraDevFiles = await readdirFull(
+        BACKGROUND_EXTRA_DEV_FILES_DIR,
+        true
+      );
 
-  return function bundleServiceWorker() {
-    return gulp
-      .src(srcs)
-      .pipe(
-        webpack({
-          ...config,
-          output: {
-            filename: 'service_worker.js',
-          },
-        })
-      )
-      .pipe(gulp.dest('dist/unpacked/background'));
+      srcs.push(...extraDevFiles);
+    }
+
+    const config = isProd ? webpackScriptProdConfig : webpackScriptDevConfig;
+
+    return taskToPromise(
+      gulp
+        .src(srcs)
+        .pipe(
+          webpack({
+            ...config,
+            output: {
+              filename: 'service_worker.js',
+            },
+          })
+        )
+        .pipe(gulp.dest('dist/unpacked/background'))
+    );
   };
 };
 
@@ -142,7 +176,7 @@ const bundleInjected = (isProd) => {
   const config = isProd ? webpackScriptProdConfig : webpackScriptDevConfig;
 
   return async function bundleInjected() {
-    const srcs = await readdirFull(INJECTED_SCRIPT_DIR);
+    const srcs = await readdirFull(INJECTED_SCRIPT_DIR, true);
 
     const tasks = srcs.map((src) => {
       const filename = path.basename(src, 'ts') + 'js';
