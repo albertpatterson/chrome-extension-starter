@@ -11,6 +11,30 @@ const webpackPageDevConfig = require('./webpack/webpack.page.dev');
 const webpackPageProdConfig = require('./webpack/webpack.page.prod');
 const DIST_PATH = path.resolve(__dirname, 'dist');
 const through2 = require('through2');
+const fs = require('fs');
+
+const INJECTED_SCRIPT_DIR = path.resolve(__dirname, 'src/injected');
+
+async function readdirFull(dir) {
+  const files = await fs.promises.readdir(dir);
+
+  return files.map((file) => path.resolve(dir, file));
+}
+
+function taskToPromise(task) {
+  return new Promise((res, rej) => task.on('end', res).on('error', rej));
+}
+
+async function runTasks(tasks, parallel) {
+  if (parallel) {
+    const promises = tasks.map(taskToPromise);
+    await Promise.all(promises);
+  } else {
+    for (const task of tasks) {
+      await taskToPromise(task);
+    }
+  }
+}
 
 function rmDir(dirPath) {
   return new Promise((res, rej) => {
@@ -117,18 +141,26 @@ const bundleServiceWorker = (isProd) => {
 const bundleInjected = (isProd) => {
   const config = isProd ? webpackScriptProdConfig : webpackScriptDevConfig;
 
-  return function bundleInjected() {
-    return gulp
-      .src(['./src/injected/injected.ts'])
-      .pipe(
-        webpack({
-          ...config,
-          output: {
-            filename: 'injected.js',
-          },
-        })
-      )
-      .pipe(gulp.dest('dist/unpacked/injected'));
+  return async function bundleInjected() {
+    const srcs = await readdirFull(INJECTED_SCRIPT_DIR);
+
+    const tasks = srcs.map((src) => {
+      const filename = path.basename(src, 'ts') + 'js';
+
+      return gulp
+        .src(src)
+        .pipe(
+          webpack({
+            ...config,
+            output: {
+              filename,
+            },
+          })
+        )
+        .pipe(gulp.dest('dist/unpacked/injected'));
+    });
+
+    await runTasks(tasks, true);
   };
 };
 

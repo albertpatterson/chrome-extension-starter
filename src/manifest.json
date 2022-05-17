@@ -18,7 +18,11 @@
   "content_scripts": [
     {
       "matches": ["https://*/*", "http://*/*"],
-      "js": ["injected/injected.js"]
+      "js": ["injected/all_pages.js"]
+    },
+    {
+      "matches": ["https://*/home/*", "http://*/home/*"],
+      "js": ["injected/home_page.js"]
     }
   ],
   "homepage_url": "https://github.com/albertpatterson/webpack-chrome-extension-seed",
