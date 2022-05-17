@@ -1,6 +1,6 @@
 # Chrome-Extension-Starter
 
-[Chrome-Extension-Starter](https://github.com/albertpatterson/chrome-extension-starter) is a starter project for a [Chrome Browser Extension](https://developer.chrome.com/docs/extensions/) including a build system facilitating rapid development and creation of optimized assets for deployment, ideal for developing complex extensions. This project also offers file watching and automatic reloading to narrow development cycles. It utilized many familiar tools for web development (Webpack, Gulp, Babel, Typescript etc) to create unpacked assets for local development as well as a zip file for deployment to the web store.
+[Chrome-Extension-Starter](https://github.com/albertpatterson/chrome-extension-starter) is a starter project for a [Chrome Browser Extension](https://developer.chrome.com/docs/extensions/) including a framework and build system, facilitating rapid development and creation of optimized assets for deployment - ideal for developing complex extensions. This project also offers file watching and automatic reloading to narrow development cycles. It utilized many familiar tools for web development (Webpack, Gulp, Babel, Typescript etc) to create unpacked assets for local development as well as a zip file for deployment to the web store.
 
 ## Usage
 
