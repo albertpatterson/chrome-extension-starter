@@ -1,7 +1,7 @@
 {
-  "name": "web-app-seed",
+  "name": "chrome-extension-starter",
   "version": "1.0.0",
-  "description": "seed for a web app",
+  "description": "A starter project for a Chrome browser extension",
   "main": "index.js",
   "scripts": {
     "build": "gulp build-prod",
@@ -13,7 +13,7 @@
   "author": "Albert Patterson",
   "repository": {
     "type": "git",
-    "url": "https://github.com/albertpatterson/webpack-chrome-extension-seed.git"
+    "url": "https://github.com/albertpatterson/chrome-extension-starter"
   },
   "license": "ISC",
   "devDependencies": {

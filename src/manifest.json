@@ -1,12 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "chrome-extension-seed",
+  "name": "Chrome-Extension-Starter",
   "version": "1.0.0",
 
   "description": "",
 
   "action": {
-    "default_title": "Chrome Extension Seed",
+    "default_title": "Chrome Extension Starter",
     "default_popup": "popup/popup.html",
     "default_icon": "icon.png"
   },
@@ -25,6 +25,6 @@
       "js": ["injected/home_page.js"]
     }
   ],
-  "homepage_url": "https://github.com/albertpatterson/webpack-chrome-extension-seed",
+  "homepage_url": "https://github.com/albertpatterson/chrome-extension-starter",
   "permissions": []
 }
