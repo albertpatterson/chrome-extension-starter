@@ -1,6 +1,12 @@
 # Chrome-Extension-Starter
 
-[Chrome-Extension-Starter](https://github.com/albertpatterson/chrome-extension-starter) is a starter project for a [Chrome Browser Extension](https://developer.chrome.com/docs/extensions/) including a framework and build system, facilitating rapid development and creation of optimized assets for deployment - ideal for developing complex extensions. This project also offers file watching and automatic reloading to narrow development cycles. It utilized many familiar tools for web development (Webpack, Gulp, Babel, Typescript etc) to create unpacked assets for local development as well as a zip file for deployment to the web store.
+![Social Preview](docs/social_preview.png)
+
+[Chrome-Extension-Starter](https://github.com/albertpatterson/chrome-extension-starter) is a starter project for a [Chrome Browser Extension](https://developer.chrome.com/docs/extensions/) including a framework and build system.
+
+[![Maintenance](https://img.shields.io/maintenance/yes/2022)](https://github.com/albertpatterson/chrome-extension-starter/graphs/commit-activity) [![GitHub license](https://img.shields.io/github/license/albertpatterson/chrome-extension-starter)](https://github.com/albertpatterson/chrome-extension-starter/blob/master/LICENSE) [![Open Issues](https://img.shields.io/github/issues/albertpatterson/chrome-extension-starter)](https://github.com/albertpatterson/chrome-extension-starter/issues)
+
+It facilitates rapid development and creation of optimized assets for deployment - ideal for developing complex extensions. This project also offers file watching and automatic reloading to narrow development cycles. It utilized many familiar tools for web development (Webpack, Gulp, Babel, Typescript etc) to create unpacked assets for local development as well as a zip file for deployment to the web store.
 
 ## Usage
 
