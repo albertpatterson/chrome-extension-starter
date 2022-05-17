@@ -3,7 +3,7 @@
   "name": "Chrome-Extension-Starter",
   "version": "1.0.0",
 
-  "description": "",
+  "description": "Chrome-Extension-Starter is a starter project for a Chrome Browser Extension including a build system facilitating rapid development and creation of optimized assets for deployment, ideal for developing complex extensions.",
 
   "action": {
     "default_title": "Chrome Extension Starter",
