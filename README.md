@@ -1,6 +1,6 @@
 # Chrome-Extension-Starter
 
-![Social Preview](docs/social_preview.png)
+![Social Preview](docs/social_preview2.png)
 
 [Chrome-Extension-Starter](https://github.com/albertpatterson/chrome-extension-starter) is a starter project for a [Chrome Browser Extension](https://developer.chrome.com/docs/extensions/) including a framework and build system.
 
