@@ -19,6 +19,7 @@ const BACKGROUND_EXTRA_DEV_FILES_DIR = path.resolve(
   BACKGROUND_PROD_FILES_DIR,
   'dev_mode_only'
 );
+const ICON_DIR = path.resolve(__dirname, 'src', 'icon');
 
 async function readdirFull(dir, filesOnly) {
   const allContents = await fs.promises.readdir(dir);
@@ -128,12 +129,22 @@ function copyManifest(isProd) {
   };
 }
 
-function copyIcon() {
-  return gulp.src(['./src/icon.png']).pipe(gulp.dest('dist/unpacked'));
+async function copyIcons() {
+  // return async function copyIcons() {
+  const srcs = await readdirFull(ICON_DIR, true);
+
+  const tasks = srcs.map((src) => {
+    const filename = path.basename(src);
+
+    return gulp.src(src).pipe(gulp.dest('dist/unpacked/icon'));
+  });
+
+  await runTasks(tasks, true);
+  // };
 }
 
 function copyRootArtifacts(isProd) {
-  return gulp.parallel(copyIcon, copyManifest(isProd));
+  return gulp.parallel(copyIcons, copyManifest(isProd));
 }
 
 const EXTRA_DEV_FILES = [
