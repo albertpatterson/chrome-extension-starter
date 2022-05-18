@@ -12,7 +12,7 @@ It facilitates rapid development and creation of optimized assets for deployment
 
 Fork this repo and use it as a starting point for a chrome extension
 
-## development
+## Development
 
 - build the project (prod mode): `npm run build`
 - build the project (dev mode): `npm run build-dev`
