@@ -2,7 +2,7 @@ const path = require('path');
 const { getScriptRules } = require('./get_script_rules');
 
 module.exports.getCommonConfig = (isProd, jsOnly) => ({
-  context: path.resolve(__dirname, jsOnly ? '../src/js' : '../src/ts'),
+  context: path.resolve(__dirname, '../src'),
   resolve: {
     extensions: jsOnly ? ['.js'] : ['.ts', '.js'],
   },

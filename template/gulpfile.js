@@ -14,7 +14,7 @@ const through2 = require('through2');
 const fs = require('fs');
 
 const JS_ONLY = false;
-const TEMPLATE_DIR = path.resolve(__dirname, 'src', JS_ONLY ? 'js' : 'ts');
+const TEMPLATE_DIR = path.resolve(__dirname, 'src');
 const ICON_DIR = path.resolve(__dirname, 'src', 'icon');
 const MANIFEST_PATH = './src/manifest.json';
 
