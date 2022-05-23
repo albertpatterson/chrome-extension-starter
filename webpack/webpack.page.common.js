@@ -1,21 +1,21 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { getTSRules } = require('./ts_compiler_options');
+const { getScriptRules } = require('./get_script_rules');
 
-module.exports.getCommonConfig = (isProd) => ({
-  context: path.resolve(__dirname, '../src'),
+module.exports.getCommonConfig = (isProd, jsOnly) => ({
+  context: path.resolve(__dirname, jsOnly ? '../src/js' : '../src/ts'),
   output: {
     path: path.resolve(__dirname, '../dist', 'unpacked'),
     filename: '[name].js',
     assetModuleFilename: 'images/[hash][ext][query]',
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: jsOnly ? ['.js'] : ['.ts', '.js'],
   },
   plugins: [],
   module: {
     rules: [
-      ...getTSRules(isProd),
+      ...getScriptRules(isProd, jsOnly),
       {
         test: /\.html$/,
         use: ['html-loader'],
@@ -28,9 +28,9 @@ module.exports.getCommonConfig = (isProd) => ({
   },
 });
 
-module.exports.createEntries = function (extraEntries) {
+module.exports.createEntries = function (extraEntries, useJs) {
   const entries = {
-    'popup/js/popup': './popup/js/popup.ts',
+    'popup/js/popup': useJs ? './popup/js/popup.js' : './popup/js/popup.ts',
   };
   if (extraEntries) Object.assign(entries, extraEntries);
   return entries;

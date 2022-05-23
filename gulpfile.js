@@ -13,13 +13,17 @@ const DIST_PATH = path.resolve(__dirname, 'dist');
 const through2 = require('through2');
 const fs = require('fs');
 
-const INJECTED_SCRIPT_DIR = path.resolve(__dirname, 'src', 'injected');
-const BACKGROUND_PROD_FILES_DIR = path.resolve(__dirname, 'src', 'background');
+const JS_ONLY = false;
+const TEMPLATE_DIR = path.resolve(__dirname, 'src', JS_ONLY ? 'js' : 'ts');
+const ICON_DIR = path.resolve(__dirname, 'src', 'icon');
+const MANIFEST_PATH = './src/manifest.json';
+
+const INJECTED_SCRIPT_DIR = path.resolve(TEMPLATE_DIR, 'injected');
+const BACKGROUND_PROD_FILES_DIR = path.resolve(TEMPLATE_DIR, 'background');
 const BACKGROUND_EXTRA_DEV_FILES_DIR = path.resolve(
   BACKGROUND_PROD_FILES_DIR,
   'dev_mode_only'
 );
-const ICON_DIR = path.resolve(__dirname, 'src', 'icon');
 
 async function readdirFull(dir, filesOnly) {
   const allContents = await fs.promises.readdir(dir);
@@ -108,7 +112,7 @@ function copyManifest(isProd) {
 
   return function copyManifest() {
     return gulp
-      .src('./src/manifest.json')
+      .src(MANIFEST_PATH)
       .pipe(
         through2.obj((chunk, enc, callback) => {
           const trans = chunk.clone();
@@ -147,11 +151,6 @@ function copyRootArtifacts(isProd) {
   return gulp.parallel(copyIcons, copyManifest(isProd));
 }
 
-const EXTRA_DEV_FILES = [
-  './src/background/dev_mode_only/chromereload.ts',
-  './src/background/dev_mode_only/keep_active.ts',
-];
-
 const bundleServiceWorker = (isProd) => {
   return async function bundleServiceWorker() {
     const srcs = await readdirFull(BACKGROUND_PROD_FILES_DIR, true);
@@ -165,7 +164,9 @@ const bundleServiceWorker = (isProd) => {
       srcs.push(...extraDevFiles);
     }
 
-    const config = isProd ? webpackScriptProdConfig : webpackScriptDevConfig;
+    const config = isProd
+      ? webpackScriptProdConfig.getConfig(JS_ONLY)
+      : webpackScriptDevConfig.getConfig(JS_ONLY);
 
     return taskToPromise(
       gulp
@@ -184,13 +185,17 @@ const bundleServiceWorker = (isProd) => {
 };
 
 const bundleInjected = (isProd) => {
-  const config = isProd ? webpackScriptProdConfig : webpackScriptDevConfig;
+  const config = isProd
+    ? webpackScriptProdConfig.getConfig(JS_ONLY)
+    : webpackScriptDevConfig.getConfig(JS_ONLY);
 
   return async function bundleInjected() {
     const srcs = await readdirFull(INJECTED_SCRIPT_DIR, true);
 
     const tasks = srcs.map((src) => {
-      const filename = path.basename(src, 'ts') + 'js';
+      const filename = JS_ONLY
+        ? path.basename(src)
+        : path.basename(src, 'ts') + 'js';
 
       return gulp
         .src(src)
@@ -214,7 +219,9 @@ function bundleScripts(isProd) {
 }
 
 function bundlePage(isProd) {
-  const config = isProd ? webpackPageProdConfig : webpackPageDevConfig;
+  const config = isProd
+    ? webpackPageProdConfig.getConfig(JS_ONLY)
+    : webpackPageDevConfig.getConfig(JS_ONLY);
 
   return function bundlePage() {
     return new Promise((res, rej) => {

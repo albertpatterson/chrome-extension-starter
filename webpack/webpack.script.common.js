@@ -1,13 +1,13 @@
 const path = require('path');
-const { getTSRules } = require('./ts_compiler_options');
+const { getScriptRules } = require('./get_script_rules');
 
-module.exports.getCommonConfig = (isProd) => ({
-  context: path.resolve(__dirname, '../src'),
+module.exports.getCommonConfig = (isProd, jsOnly) => ({
+  context: path.resolve(__dirname, jsOnly ? '../src/js' : '../src/ts'),
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: jsOnly ? ['.js'] : ['.ts', '.js'],
   },
   plugins: [],
   module: {
-    rules: [...getTSRules(isProd)],
+    rules: [...getScriptRules(isProd, jsOnly)],
   },
 });
