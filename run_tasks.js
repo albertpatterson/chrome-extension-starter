@@ -1,25 +1,31 @@
-import fs, { write } from 'fs';
+import fs from 'fs';
 import path from 'path';
-import rimraf from 'rimraf';
 import promisify from 'util.promisify';
 import ncp from 'ncp';
-import { spawn } from 'child_process';
 import { Listr } from 'listr2';
 import { execa } from 'execa';
 import * as url from 'url';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-const rmp = promisify(rimraf);
 const copyFile = promisify(fs.copyFile);
 
 function getSrcPath(writeDir) {
   return path.resolve(writeDir, 'src');
 }
 
+async function tryMkdir(dir) {
+  try {
+    await fs.promises.mkdir(dir);
+  } catch (error) {
+    if (error.code !== 'EEXIST') {
+      throw error;
+    }
+  }
+}
+
 async function setup(writeDir) {
-  await rmp(writeDir);
-  await fs.promises.mkdir(writeDir);
-  await fs.promises.mkdir(getSrcPath(writeDir));
+  await tryMkdir(writeDir);
+  await tryMkdir(getSrcPath(writeDir));
 }
 
 async function copyCommonTemplates(writeDir) {
