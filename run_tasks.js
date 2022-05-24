@@ -118,7 +118,7 @@ export async function runTasks(config) {
     { title: 'Write config files', task: () => copyCommonTemplates(writePath) },
     { title: 'Write build file', task: copyGulpFileForLang },
     { title: copyTemplagesForLangTitle, task: copyTemplatsForLang },
-    { title: 'Install', task: npmInstall(writePath) },
+    { title: 'Install', task: (ctx, task) => npmInstall(ctx, task, writePath) },
     { exitOnError: false },
   ]);
 
