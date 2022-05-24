@@ -1,7 +1,32 @@
 import arg from 'arg';
 import inquirer from 'inquirer';
+import path from 'path';
 
-export async function get_settings(rawArgs) {
+function getFullWriteDir(writeDirName) {
+  return path.resolve(process.cwd(), writeDirName);
+}
+
+function isWriteDirNameValid(writeDir) {
+  if (writeDir === '.') {
+    return true;
+  }
+
+  return Boolean(writeDir.match(/^[\w\-\_]+$/));
+}
+
+function getWriteDir(providedWriteDirName, acceptDefaults) {
+  let writeDirName =
+    providedWriteDirName && isWriteDirNameValid(providedWriteDirName)
+      ? providedWriteDirName
+      : undefined;
+
+  writeDirName =
+    writeDirName || (acceptDefaults ? 'browser_extension' : undefined);
+
+  return writeDirName && getFullWriteDir(writeDirName);
+}
+
+async function getInitialSettings(rawArgs) {
   const args = arg(
     {
       '--javascript': Boolean,
@@ -16,8 +41,11 @@ export async function get_settings(rawArgs) {
 
   const skipPrompts = args['--yes'] || false;
 
+  const providedWriteDirName = args._[0];
+  const writeDir = getWriteDir(providedWriteDirName, skipPrompts);
+
   const initialSettings = {
-    writeDir: args._[0] || (skipPrompts ? 'browser_extension' : undefined),
+    writeDir,
     useJs: args['--javascript'] || (skipPrompts ? false : undefined),
     install: args['--install'] || (skipPrompts ? true : undefined),
   };
@@ -26,9 +54,9 @@ export async function get_settings(rawArgs) {
   if (initialSettings.writeDir === undefined) {
     questions.push({
       type: 'input',
-      name: 'writeDir',
-      message: 'Directory to write',
-      validate: (value) => Boolean(value.match(/^[\w\-\_]+$/)),
+      name: 'writeDirName',
+      message: 'Directory Name to write',
+      validate: isWriteDirNameValid,
     });
   }
 
@@ -51,10 +79,44 @@ export async function get_settings(rawArgs) {
 
   const answers = await inquirer.prompt(questions);
 
+  const writeDirUpdated =
+    initialSettings.writeDir ?? getWriteDir(answers.writeDirName, false);
+
   return {
     ...initialSettings,
-    writeDir: initialSettings.writeDir ?? answers.writeDir,
+    writeDir: writeDirUpdated,
     useJs: initialSettings.useJs ?? answers.language === 'Javascript',
     install: initialSettings.install ?? answers.install,
   };
+}
+
+async function confirmSettings(initialSettings) {
+  const fullWriteDir = path.resolve(process.cwd(), initialSettings.writeDir);
+
+  const confirmMessage = `Overwrite all contents at ${fullWriteDir} and replace with ${
+    initialSettings.useJs ? 'javascript' : 'typescript'
+  } templates and install?`;
+
+  const question = {
+    type: 'confirm',
+    name: 'confirm',
+    message: confirmMessage,
+  };
+
+  const answers = await inquirer.prompt([question]);
+  return answers.confirm;
+}
+
+export async function getSettings(rawArgs) {
+  let initialSettings = await getInitialSettings(rawArgs);
+
+  while (true) {
+    const confirmed = await confirmSettings(initialSettings);
+
+    if (confirmed) {
+      return initialSettings;
+    } else {
+      initialSettings = await getInitialSettings([]);
+    }
+  }
 }

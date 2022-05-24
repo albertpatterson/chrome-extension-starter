@@ -8,22 +8,21 @@ import { Listr } from 'listr2';
 import { execa } from 'execa';
 import * as url from 'url';
 
-const CWD = process.cwd();
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const rmp = promisify(rimraf);
 const copyFile = promisify(fs.copyFile);
 
-function getSrcPath(writePath) {
-  return path.resolve(writePath, 'src');
+function getSrcPath(writeDir) {
+  return path.resolve(writeDir, 'src');
 }
 
-async function setup(writePath) {
-  await rmp(writePath);
-  await fs.promises.mkdir(writePath);
-  await fs.promises.mkdir(getSrcPath(writePath));
+async function setup(writeDir) {
+  await rmp(writeDir);
+  await fs.promises.mkdir(writeDir);
+  await fs.promises.mkdir(getSrcPath(writeDir));
 }
 
-async function copyCommonTemplates(writePath) {
+async function copyCommonTemplates(writeDir) {
   for (const file of [
     ['babel.config.js'],
     ['jest.config.js'],
@@ -32,23 +31,23 @@ async function copyCommonTemplates(writePath) {
     ['src', 'manifest.json'],
   ]) {
     const template = path.resolve(__dirname, 'template', ...file);
-    const out = path.resolve(writePath, ...file);
+    const out = path.resolve(writeDir, ...file);
 
     await copyFile(template, out);
   }
 
   await promisify(ncp)(
     path.resolve(__dirname, 'template', 'webpack'),
-    path.resolve(writePath, 'webpack')
+    path.resolve(writeDir, 'webpack')
   );
 
   await promisify(ncp)(
     path.resolve(__dirname, 'template', 'src', 'icon'),
-    path.resolve(writePath, 'src', 'icon')
+    path.resolve(writeDir, 'src', 'icon')
   );
 }
 
-async function copyGulpfile(usJs, writePath) {
+async function copyGulpfile(usJs, writeDir) {
   const data = await fs.promises.readFile(
     path.resolve(__dirname, 'template', 'gulpfile.js')
   );
@@ -58,26 +57,26 @@ async function copyGulpfile(usJs, writePath) {
     : data;
 
   await fs.promises.writeFile(
-    path.resolve(writePath, 'gulpfile.js'),
+    path.resolve(writeDir, 'gulpfile.js'),
     langSpecific
   );
 }
 
-async function copyJsTemplates(writePath) {
+async function copyJsTemplates(writeDir) {
   await promisify(ncp)(
     path.resolve(__dirname, 'template', 'src', 'js'),
-    path.resolve(writePath, 'src')
+    path.resolve(writeDir, 'src')
   );
 }
 
-async function copyTsTemplates(writePath) {
+async function copyTsTemplates(writeDir) {
   await promisify(ncp)(
     path.resolve(__dirname, 'template', 'src', 'ts'),
-    path.resolve(writePath, 'src')
+    path.resolve(writeDir, 'src')
   );
 }
 
-async function npmInstall(ctx, task, writePath) {
+async function npmInstall(ctx, task, writeDir) {
   task.output = 'installing';
   let numPeriods = 0;
 
@@ -92,31 +91,33 @@ async function npmInstall(ctx, task, writePath) {
   task.output = 'installing...';
 
   const cmd = await execa('npm', ['install'], {
-    cwd: writePath,
+    cwd: writeDir,
   });
 
   clearInterval(taskOutputUpdater);
 }
 
 export async function runTasks(config) {
-  const writeDir = config.writeDir || 'browser-extension';
+  const writeDir = config.writeDir;
+  if (!writeDir) {
+    throw new Error('invalid directory to write.');
+  }
+
   const useJs = Boolean(config.useJs);
 
-  const writePath = path.resolve(CWD, writeDir);
-
-  const copyGulpFileForLang = () => copyGulpfile(useJs, writePath);
+  const copyGulpFileForLang = () => copyGulpfile(useJs, writeDir);
   const copyTemplagesForLangTitle = useJs
     ? 'Write JS sources'
     : 'Write TS sources';
   const copyTemplatsForLang = () =>
-    useJs ? copyJsTemplates(writePath) : copyTsTemplates(writePath);
+    useJs ? copyJsTemplates(writeDir) : copyTsTemplates(writeDir);
 
   const tasks = [
     {
       title: 'setup',
-      task: () => setup(writePath),
+      task: () => setup(writeDir),
     },
-    { title: 'Write config files', task: () => copyCommonTemplates(writePath) },
+    { title: 'Write config files', task: () => copyCommonTemplates(writeDir) },
     { title: 'Write build file', task: copyGulpFileForLang },
     { title: copyTemplagesForLangTitle, task: copyTemplatsForLang },
   ];
@@ -124,7 +125,7 @@ export async function runTasks(config) {
   if (config.install) {
     tasks.push({
       title: 'Install',
-      task: (ctx, task) => npmInstall(ctx, task, writePath),
+      task: (ctx, task) => npmInstall(ctx, task, writeDir),
     });
   }
 
