@@ -110,7 +110,7 @@ export async function runTasks(config) {
   const copyTemplatsForLang = () =>
     useJs ? copyJsTemplates(writePath) : copyTsTemplates(writePath);
 
-  const tasks = new Listr([
+  const tasks = [
     {
       title: 'setup',
       task: () => setup(writePath),
@@ -118,9 +118,16 @@ export async function runTasks(config) {
     { title: 'Write config files', task: () => copyCommonTemplates(writePath) },
     { title: 'Write build file', task: copyGulpFileForLang },
     { title: copyTemplagesForLangTitle, task: copyTemplatsForLang },
-    { title: 'Install', task: (ctx, task) => npmInstall(ctx, task, writePath) },
-    { exitOnError: false },
-  ]);
+  ];
 
-  await tasks.run();
+  if (config.install) {
+    tasks.push({
+      title: 'Install',
+      task: (ctx, task) => npmInstall(ctx, task, writePath),
+    });
+  }
+
+  const listr = new Listr(tasks);
+
+  await listr.run();
 }
