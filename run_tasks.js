@@ -8,6 +8,7 @@ import { Listr } from 'listr2';
 import { execa } from 'execa';
 import * as url from 'url';
 
+const CWD = process.cwd();
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const rmp = promisify(rimraf);
 const copyFile = promisify(fs.copyFile);
@@ -101,7 +102,7 @@ export async function runTasks(config) {
   const writeDir = config.writeDir || 'browser-extension';
   const useJs = Boolean(config.useJs);
 
-  const writePath = path.resolve(__dirname, writeDir);
+  const writePath = path.resolve(CWD, writeDir);
 
   const copyGulpFileForLang = () => copyGulpfile(useJs, writePath);
   const copyTemplagesForLangTitle = useJs

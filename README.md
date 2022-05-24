@@ -10,9 +10,18 @@ It facilitates rapid development and creation of optimized assets for deployment
 
 ## Usage
 
-Fork this repo and use it as a starting point for a chrome extension
+Create extension resources automatically via npx
+
+`npx create-extension [new directory name]`
+
+- options
+  - -j or --javascript=true to use javascript instead of typescript
+  - -i or --install=true to automatically install
+  - -y or --yes=true to accept defaults (create in a 'browser_extension" directory with typscript and automatically install)
 
 ## Development
+
+Once the extension resources are created, the following scripts are available
 
 - build the project (prod mode): `npm run build`
 - build the project (dev mode): `npm run build-dev`
