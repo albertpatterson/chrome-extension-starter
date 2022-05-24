@@ -18,6 +18,8 @@
   "type": "module",
   "dependencies": {
     "chalk": "^5.0.1",
+    "execa": "^6.1.0",
+    "listr2": "^4.0.5",
     "ncp": "^2.0.0",
     "rimraf": "^3.0.2",
     "util.promisify": "^1.1.1"
