@@ -1,6 +1,6 @@
 {
   "name": "create-extension",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "Create a browser extension.",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "addon"
   ],
   "author": "Albert Patterson",
-  "license": "ISC",
+  "license": "MIT",
   "type": "module",
   "dependencies": {
     "arg": "^5.0.1",
