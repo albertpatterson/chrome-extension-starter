@@ -21,7 +21,7 @@ Create extension resources automatically via npx
 
 ## Development
 
-Once the extension resources are created, the following scripts are available
+Once the extension resources are created, the following scripts are available to build the code.
 
 - build the project (prod mode): `npm run build`
 - build the project (dev mode): `npm run build-dev`
@@ -30,6 +30,12 @@ Once the extension resources are created, the following scripts are available
 - Typical first steps include
   - Update the package.json and src/manifest.json with the details for your project and configuration for your extension.
   - update the files under src to build your application
+
+Once the code is built, the unpacked extension will ba available in dist/unpacked and one can directly [Load an unpacked extension](https://developer.chrome.com/docs/extensions/mv3/getstarted/#unpacked) into the browser.
+
+![Load an unpacked extension](https://wd.imgix.net/image/BhuKGJaIeLNPW9ehns59NfwqKxF2/vOu7iPbaapkALed96rzN.png?auto=format&w=571)
+
+If built in production mode, a zip file will be created to up load to the Web Store
 
 ## License
 
