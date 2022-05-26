@@ -1,7 +1,7 @@
 import { getConfig as getBackgroundConfig } from './webpack/get.webpack.config.background.js';
 import { getConfig as getInjectedConfig } from './webpack/get.webpack.config.injected.js';
 import { getConfig as getPopupConfig } from './webpack/get.webpack.config.popup.js';
-import * as tools from './tools.js';
+import * as tools from 'simple_build_tools';
 import { CONSTANTS } from './constants.js';
 
 const useJs = false;
@@ -13,9 +13,9 @@ const configs = {
 };
 
 const clean = () => tools.rmrf(CONSTANTS.DIST_DIR);
-const bundleBackground = () => tools.webpackAsync(configs.background);
-const bundleInjected = () => tools.webpackAsync(configs.injected);
-const bundlePopup = () => tools.webpackAsync(configs.popup);
+const bundleBackground = () => tools.webpack(configs.background);
+const bundleInjected = () => tools.webpack(configs.injected);
+const bundlePopup = () => tools.webpack(configs.popup);
 const copyIcons = () =>
   tools.copyDir(CONSTANTS.ICONS_DIR_SRC, CONSTANTS.ICONS_DIR_DESC);
 const copyManifest = () =>

@@ -44,6 +44,7 @@
     "chokidar": "^3.5.3",
     "livereload": "^0.9.3",
     "lodash": "^4.17.21",
-    "ncp": "^2.0.0"
+    "ncp": "^2.0.0",
+    "simple_build_tools": "^1.0.0"
   }
 }

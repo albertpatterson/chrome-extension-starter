@@ -1,13 +1,11 @@
 import fs from 'fs';
 import path from 'path';
-import promisify from 'util.promisify';
-import ncp from 'ncp';
 import { Listr } from 'listr2';
 import { execa } from 'execa';
 import * as url from 'url';
+import * as tools from 'simple_build_tools';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-const copyFile = promisify(fs.copyFile);
 
 function getSrcPath(writeDir) {
   return path.resolve(writeDir, 'src');
@@ -39,59 +37,57 @@ async function copyCommonTemplates(writeDir) {
     const template = path.resolve(__dirname, 'template', ...file);
     const out = path.resolve(writeDir, ...file);
 
-    await copyFile(template, out);
+    await tools.copyFile(template, out);
   }
 
-  await promisify(ncp)(
+  await tools.copyDir(
     path.resolve(__dirname, 'template', 'build'),
     path.resolve(writeDir, 'build')
   );
 
-  await promisify(ncp)(
+  await tools.copyDir(
     path.resolve(__dirname, 'template', 'src', 'icon'),
     path.resolve(writeDir, 'src', 'icon')
   );
 }
 
 async function copyDevBuildFile(useJs, writeDir) {
-  const data = await fs.promises.readFile(
-    path.resolve(__dirname, 'template', 'build', 'dev.js')
-  );
+  const src = path.resolve(__dirname, 'template', 'build', 'dev.js');
+  const dest = path.resolve(writeDir, 'build', 'dev.js');
+  const transform = (data) => {
+    const langSpecific = useJs
+      ? data.toString().replace('const useJs = false;', 'const useJs = true;')
+      : data;
 
-  const langSpecific = useJs
-    ? data.toString().replace('const useJs = false;', 'const useJs = true;')
-    : data;
+    return langSpecific;
+  };
 
-  await fs.promises.writeFile(
-    path.resolve(writeDir, 'build', 'dev.js'),
-    langSpecific
-  );
+  await tools.transformFile(src, dest, transform);
 }
 
 async function copyProdBuildFile(useJs, writeDir) {
-  const data = await fs.promises.readFile(
-    path.resolve(__dirname, 'template', 'build', 'prod.js')
-  );
+  const src = path.resolve(__dirname, 'template', 'build', 'prod.js');
+  const dest = path.resolve(writeDir, 'build', 'prod.js');
+  const transform = (data) => {
+    const langSpecific = useJs
+      ? data.toString().replace('const useJs = false;', 'const useJs = true;')
+      : data;
 
-  const langSpecific = useJs
-    ? data.toString().replace('const useJs = false;', 'const useJs = true;')
-    : data;
+    return langSpecific;
+  };
 
-  await fs.promises.writeFile(
-    path.resolve(writeDir, 'build', 'prod.js'),
-    langSpecific
-  );
+  await tools.transformFile(src, dest, transform);
 }
 
 async function copyJsTemplates(writeDir) {
-  await promisify(ncp)(
+  await tools.copyDir(
     path.resolve(__dirname, 'template', 'src', 'js'),
     path.resolve(writeDir, 'src')
   );
 }
 
 async function copyTsTemplates(writeDir) {
-  await promisify(ncp)(
+  await tools.copyDir(
     path.resolve(__dirname, 'template', 'src', 'ts'),
     path.resolve(writeDir, 'src')
   );
