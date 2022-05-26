@@ -30,8 +30,8 @@ async function setup(writeDir) {
 
 async function copyCommonTemplates(writeDir) {
   for (const file of [
-    ['babel.config.js'],
-    ['jest.config.js'],
+    ['babel.config.cjs'],
+    ['jest.config.cjs'],
     ['package.json'],
     ['tsconfig.json'],
     ['src', 'manifest.json'],
@@ -43,8 +43,8 @@ async function copyCommonTemplates(writeDir) {
   }
 
   await promisify(ncp)(
-    path.resolve(__dirname, 'template', 'webpack'),
-    path.resolve(writeDir, 'webpack')
+    path.resolve(__dirname, 'template', 'build'),
+    path.resolve(writeDir, 'build')
   );
 
   await promisify(ncp)(
@@ -53,17 +53,32 @@ async function copyCommonTemplates(writeDir) {
   );
 }
 
-async function copyGulpfile(usJs, writeDir) {
+async function copyDevBuildFile(useJs, writeDir) {
   const data = await fs.promises.readFile(
-    path.resolve(__dirname, 'template', 'gulpfile.js')
+    path.resolve(__dirname, 'template', 'build', 'dev.js')
   );
 
-  const langSpecific = usJs
-    ? data.toString().replace('const JS_ONLY = false;', 'const JS_ONLY = true;')
+  const langSpecific = useJs
+    ? data.toString().replace('const useJs = false;', 'const useJs = true;')
     : data;
 
   await fs.promises.writeFile(
-    path.resolve(writeDir, 'gulpfile.js'),
+    path.resolve(writeDir, 'build', 'dev.js'),
+    langSpecific
+  );
+}
+
+async function copyProdBuildFile(useJs, writeDir) {
+  const data = await fs.promises.readFile(
+    path.resolve(__dirname, 'template', 'build', 'prod.js')
+  );
+
+  const langSpecific = useJs
+    ? data.toString().replace('const useJs = false;', 'const useJs = true;')
+    : data;
+
+  await fs.promises.writeFile(
+    path.resolve(writeDir, 'build', 'prod.js'),
     langSpecific
   );
 }
@@ -111,7 +126,11 @@ export async function runTasks(config) {
 
   const useJs = Boolean(config.useJs);
 
-  const copyGulpFileForLang = () => copyGulpfile(useJs, writeDir);
+  const copyBuildRunners = async () => {
+    await copyProdBuildFile(useJs, writeDir);
+    await copyDevBuildFile(useJs, writeDir);
+  };
+
   const copyTemplagesForLangTitle = useJs
     ? 'Write JS sources'
     : 'Write TS sources';
@@ -123,8 +142,11 @@ export async function runTasks(config) {
       title: 'setup',
       task: () => setup(writeDir),
     },
-    { title: 'Write config files', task: () => copyCommonTemplates(writeDir) },
-    { title: 'Write build file', task: copyGulpFileForLang },
+    {
+      title: 'Write config & build files',
+      task: () => copyCommonTemplates(writeDir),
+    },
+    { title: 'Write build runners', task: copyBuildRunners },
     { title: copyTemplagesForLangTitle, task: copyTemplatsForLang },
   ];
 
