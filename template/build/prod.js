@@ -24,21 +24,20 @@ const copyManifest = () =>
 const createZip = () =>
   tools.zipDirectory(CONSTANTS.DIST_UNPACKED_DIR, CONSTANTS.ZIP_PATH);
 
-export async function build() {
-  const start = Date.now();
-  await tools.series([
-    clean,
-    tools.parallel([
-      bundleBackground,
-      bundleInjected,
-      bundlePopup,
-      copyIcons,
-      copyManifest,
-    ]),
-    createZip,
-  ])();
-  console.log(`took ${Date.now() - start}ms`);
-}
+export const build = async () =>
+  tools.runTasks(
+    tools.series([
+      clean,
+      tools.parallel([
+        bundleBackground,
+        bundleInjected,
+        bundlePopup,
+        copyIcons,
+        copyManifest,
+      ]),
+      createZip,
+    ])
+  );
 
 if (process.argv[2] === '-r') {
   await build();
