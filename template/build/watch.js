@@ -9,9 +9,13 @@ import chalk from 'chalk';
   const server = livereload.createServer();
 
   async function buildAndReload() {
-    await build();
-    server.refresh('');
-    console.log(chalk.bgMagenta('Reloaded'));
+    try {
+      await build();
+      server.refresh('');
+      console.log(chalk.bgMagenta('Reloaded'));
+    } catch (error) {
+      console.log(error.stack || error.message || error.details);
+    }
   }
 
   const debouncedBuild = _.debounce(buildAndReload, 1e3);
