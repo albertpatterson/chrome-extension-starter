@@ -1,17 +1,7 @@
-import { getMessage } from '../util/message';
-const utilMessage: string = getMessage();
-console.log(utilMessage);
+import { handleRequest } from '../messaging/message';
 
-const messages = [
-  'I',
-  'run',
-  'on ',
-  'all',
-  'pages',
-  'made',
-  'with',
-  'typescript',
-];
-for (const message of messages) {
-  console.log(message);
-}
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log('received message in tab', request);
+
+  return handleRequest(request, sender, sendResponse);
+});
