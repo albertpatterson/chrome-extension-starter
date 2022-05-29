@@ -2,6 +2,7 @@ import { send } from 'process';
 import { BaseRequest, ResponseResult } from '../../types';
 import { BaseMessageSystem, createMessageSystem } from '../base_message_system';
 import { handleAsyncInTab } from './handle_async_in_tab';
+import { handleAsyncInServiceWorker } from './handle_async_in_service_worker';
 
 const SIMPLE_REQUEST_NAME = 'simple request';
 export interface SimpleRequest extends BaseRequest {
@@ -22,5 +23,6 @@ export function canHandle(request: BaseRequest): request is SimpleRequest {
 
 export const messageSystem = createMessageSystem<SimpleRequest>(
   canHandle,
-  handleAsyncInTab
+  handleAsyncInTab,
+  handleAsyncInServiceWorker
 );
