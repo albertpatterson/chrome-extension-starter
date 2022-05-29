@@ -20,7 +20,11 @@ export function canHandle(request: BaseRequest): request is SimpleRequest {
   return request.name === SIMPLE_REQUEST_NAME;
 }
 
-export const messageSystem = createMessageSystem<SimpleRequest>(
+export interface SimpleData {
+  simpleDataString: string;
+}
+
+export const messageSystem = createMessageSystem<SimpleRequest, SimpleData>(
   canHandle,
   handleAsyncInTab,
   handleAsyncInServiceWorker

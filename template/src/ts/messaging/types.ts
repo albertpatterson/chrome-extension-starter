@@ -2,26 +2,26 @@ export interface BaseRequest {
   name: string;
 }
 
-export interface ResponseSuccess {
+export interface ResponseSuccess<T> {
   succeeded: true;
-  data: string;
+  data: T;
 }
 
-export interface ResponseFailure {
+export interface ResponseFailure<T> {
   succeeded: false;
-  data: string;
+  data: T;
 }
 
-export type ResponseResult = ResponseSuccess | ResponseFailure;
+export type ResponseResult<T> = ResponseSuccess<T> | ResponseFailure<T>;
 
-export function isResponseSuccess(
-  result: ResponseResult
-): result is ResponseSuccess {
+export function isResponseSuccess<T>(
+  result: ResponseResult<T>
+): result is ResponseSuccess<T> {
   return result.succeeded;
 }
 
-export function isResponseFailure(
-  result: ResponseResult
-): result is ResponseFailure {
+export function isResponseFailure<T>(
+  result: ResponseResult<T>
+): result is ResponseFailure<T> {
   return !result.succeeded;
 }

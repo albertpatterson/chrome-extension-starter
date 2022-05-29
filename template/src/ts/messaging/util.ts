@@ -1,17 +1,18 @@
 import { ResponseResult, isResponseFailure } from './types';
 
-export function stringifyResponse(response: ResponseResult | void) {
+export function stringifyResponse<T>(response: ResponseResult<T> | void) {
   if (response) {
+    const stringified = JSON.stringify(response.data);
     if (isResponseFailure(response)) {
-      return `response failure: "${response.data}"`;
+      return `response failure: "${stringified}"`;
     } else {
-      return `response success: "${response.data}"`;
+      return `response success: "${stringified}"`;
     }
   } else {
     return 'no response received';
   }
 }
 
-export function logResponse(response: ResponseResult | void) {
+export function logResponse<T>(response: ResponseResult<T> | void) {
   console.log(stringifyResponse(response));
 }

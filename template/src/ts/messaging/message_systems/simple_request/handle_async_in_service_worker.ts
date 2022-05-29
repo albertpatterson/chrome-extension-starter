@@ -1,13 +1,16 @@
-import { SimpleRequest } from './message_system';
+import {
+  SimpleRequest,
+  SimpleData,
+  messageSystem as simpleMessageSystem,
+} from './message_system';
 import { ResponseResult } from '../../types';
 import { create as createSimpleRequest } from './message_system';
-import { sendRequestInServiceWorker } from '../../message';
 import { logResponse, stringifyResponse } from '../../util';
 
 export async function handleAsyncInServiceWorker(
   request: SimpleRequest,
   sender: chrome.runtime.MessageSender
-): Promise<ResponseResult> {
+): Promise<ResponseResult<SimpleData>> {
   console.log(
     `Handling Simple Request with message "${request.message}" in service worker`
   );
@@ -20,18 +23,20 @@ export async function handleAsyncInServiceWorker(
   const simpleRequest = createSimpleRequest(msg);
 
   console.log(`sending simple request in service worker with message"${msg}"`);
-  const response = await sendRequestInServiceWorker(
+  const response = await simpleMessageSystem.sendInServiceWorker(
     activeTab.id,
     simpleRequest
   );
 
   logResponse(response);
 
-  const data = `completed on in service worker with response "${stringifyResponse(
-    response
-  )}"}`;
+  const data = {
+    simpleDataString: `completed on in service worker with response "${stringifyResponse(
+      response
+    )}"}`,
+  };
   console.log(
-    `returning successful result in service worker with data "${data}"`
+    `returning successful result in service worker with simpleDataString "${data.simpleDataString}"`
   );
   return {
     succeeded: true,
