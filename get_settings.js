@@ -32,9 +32,11 @@ async function getInitialSettings(rawArgs) {
       '--javascript': Boolean,
       '--yes': Boolean,
       '--install': Boolean,
+      '--git': Boolean,
       '-j': '--javascript',
       '-y': '--yes',
       '-i': '--install',
+      '-g': '--git',
     },
     { argv: rawArgs.slice(2) }
   );
@@ -48,6 +50,7 @@ async function getInitialSettings(rawArgs) {
     writeDir,
     useJs: args['--javascript'] || (skipPrompts ? false : undefined),
     install: args['--install'] || (skipPrompts ? true : undefined),
+    git: args['--git'] || (skipPrompts ? true : undefined),
   };
 
   const questions = [];
@@ -77,6 +80,14 @@ async function getInitialSettings(rawArgs) {
     });
   }
 
+  if (initialSettings.install === undefined) {
+    questions.push({
+      type: 'confirm',
+      name: 'git',
+      message: 'Initialize git?',
+    });
+  }
+
   const answers = await inquirer.prompt(questions);
 
   const writeDirUpdated =
@@ -87,7 +98,20 @@ async function getInitialSettings(rawArgs) {
     writeDir: writeDirUpdated,
     useJs: initialSettings.useJs ?? answers.language === 'Javascript',
     install: initialSettings.install ?? answers.install,
+    git: initialSettings.git ?? answers.git,
   };
+}
+
+function getFinishingDescription(initialSettings) {
+  if (initialSettings.install && initialSettings.git) {
+    return 'then install and initialize git';
+  } else if (initialSettings.install) {
+    return 'then install';
+  } else if (initialSettings.git) {
+    return 'then initialize git';
+  }
+
+  return '';
 }
 
 async function confirmSettings(initialSettings) {
@@ -95,7 +119,7 @@ async function confirmSettings(initialSettings) {
 
   const confirmMessage = `Overwrite all contents at ${fullWriteDir} and replace with ${
     initialSettings.useJs ? 'javascript' : 'typescript'
-  } templates and install?`;
+  } templates ${getFinishingDescription(initialSettings)}`;
 
   const question = {
     type: 'confirm',

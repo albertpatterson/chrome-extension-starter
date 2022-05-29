@@ -6,7 +6,7 @@ import * as url from 'url';
 import * as tools from 'simple_build_tools';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-
+const TEMPLATE_DIR = path.resolve(__dirname, 'template');
 function getSrcPath(writeDir) {
   return path.resolve(writeDir, 'src');
 }
@@ -34,25 +34,25 @@ async function copyCommonTemplates(writeDir) {
     ['tsconfig.json'],
     ['src', 'manifest.json'],
   ]) {
-    const template = path.resolve(__dirname, 'template', ...file);
+    const template = path.resolve(TEMPLATE_DIR, ...file);
     const out = path.resolve(writeDir, ...file);
 
     await tools.copyFile(template, out);
   }
 
   await tools.copyDir(
-    path.resolve(__dirname, 'template', 'build'),
+    path.resolve(TEMPLATE_DIR, 'build'),
     path.resolve(writeDir, 'build')
   );
 
   await tools.copyDir(
-    path.resolve(__dirname, 'template', 'src', 'icon'),
+    path.resolve(TEMPLATE_DIR, 'src', 'icon'),
     path.resolve(writeDir, 'src', 'icon')
   );
 }
 
 async function copyDevBuildFile(useJs, writeDir) {
-  const src = path.resolve(__dirname, 'template', 'build', 'dev.js');
+  const src = path.resolve(TEMPLATE_DIR, 'build', 'dev.js');
   const dest = path.resolve(writeDir, 'build', 'dev.js');
   const transform = (data) => {
     const langSpecific = useJs
@@ -66,7 +66,7 @@ async function copyDevBuildFile(useJs, writeDir) {
 }
 
 async function copyProdBuildFile(useJs, writeDir) {
-  const src = path.resolve(__dirname, 'template', 'build', 'prod.js');
+  const src = path.resolve(TEMPLATE_DIR, 'build', 'prod.js');
   const dest = path.resolve(writeDir, 'build', 'prod.js');
   const transform = (data) => {
     const langSpecific = useJs
@@ -81,14 +81,14 @@ async function copyProdBuildFile(useJs, writeDir) {
 
 async function copyJsTemplates(writeDir) {
   await tools.copyDir(
-    path.resolve(__dirname, 'template', 'src', 'js'),
+    path.resolve(TEMPLATE_DIR, 'src', 'js'),
     path.resolve(writeDir, 'src')
   );
 }
 
 async function copyTsTemplates(writeDir) {
   await tools.copyDir(
-    path.resolve(__dirname, 'template', 'src', 'ts'),
+    path.resolve(TEMPLATE_DIR, 'src', 'ts'),
     path.resolve(writeDir, 'src')
   );
 }
@@ -112,6 +112,25 @@ async function npmInstall(ctx, task, writeDir) {
   });
 
   clearInterval(taskOutputUpdater);
+}
+
+async function gitInit(writeDir) {
+  const template = path.resolve(TEMPLATE_DIR, '.gitignore');
+  const out = path.resolve(writeDir, '.gitignore');
+
+  await tools.copyFile(template, out);
+
+  await execa('git', ['init'], {
+    cwd: writeDir,
+  });
+
+  await execa('git', ['add', '.'], {
+    cwd: writeDir,
+  });
+
+  await execa('git', ['commit', '-am', '"initial"'], {
+    cwd: writeDir,
+  });
 }
 
 export async function runTasks(config) {
@@ -150,6 +169,13 @@ export async function runTasks(config) {
     tasks.push({
       title: 'Install',
       task: (ctx, task) => npmInstall(ctx, task, writeDir),
+    });
+  }
+
+  if (config.git) {
+    tasks.push({
+      title: 'Initialize git',
+      task: () => gitInit(writeDir),
     });
   }
 
