@@ -37,6 +37,28 @@ Once the code is built, the unpacked extension will be available in dist/unpacke
 
 If built in production mode, a zip file will be created to up load to the Web Store.
 
+## Directories
+
+- <b>src</b>: The location of src files composing the extension
+
+  - <b>manifest.json</b>: the [Manifest file](https://developer.chrome.com/docs/extensions/mv3/manifest/)
+  - <b>background</b>: files that run in the background and compose the [service worker](https://developer.chrome.com/docs/extensions/mv3/service_workers/)
+  - <b>injected</b>: files that get injected into web pages via [content scripts](https://developer.chrome.com/docs/extensions/mv3/content_scripts/)
+  - <b>popup</b>: files that build the [popup](https://developer.chrome.com/docs/extensions/reference/action/#popup).
+    - Reminder: The action.onClicked event will not be dispatched if the extension action has specified a popup to show on click on the current tab.
+  - <b>util</b>: Utils for use throughout the extension
+  - <b>messaging</b>: Simplilfied messaging utils which provide type safety and simplify [Message Passing](https://developer.chrome.com/docs/extensions/mv3/messaging/)
+
+    - To extend this with arbitrary message types, copy the contents of src/messaging/message_systems/simple_request and create the following
+
+      - <b>message_system.ts</b>: a message system that facilitates straightforward message passing
+      - <b>handle_async_in_service_worker.ts</b>: defines how the service worker response to a particular type of message
+      - <b>handle_async_in_tab</b>: defines how the the tab response to a particular type of message
+
+    - Add the new message system to the list of registered message systems in src/messaging/message_systems.ts
+    - Available with typescript template only
+    - Loaded into both the injected scripts and the service worker, so may cause increased package size
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details
