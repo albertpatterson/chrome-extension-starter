@@ -6,11 +6,14 @@ export async function handleAsyncInTab(
   sender: chrome.runtime.MessageSender
 ): Promise<ResponseResult> {
   console.log(
-    `Handled Simple Message with message "${request.message}" on tab with title ${document.title}`
+    `Handled Simple Request with message "${request.message}" on tab with title "${document.title}"`
   );
+
+  const data = `completed on tab with title ${document.title}, responding to Request with message"${request.message}"`;
+  console.log(`returning successful result in tab with data "${data}"`);
 
   return {
     succeeded: true,
-    data: `completed on tab with title ${document.title}`,
+    data,
   };
 }
