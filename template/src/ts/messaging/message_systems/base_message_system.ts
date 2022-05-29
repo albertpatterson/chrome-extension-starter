@@ -10,7 +10,10 @@ export abstract class BaseMessageSystem<T extends BaseRequest, V> {
    * @param tabId the id of the tab to receive the message
    * @param request the request to handle
    */
-  async sendInServiceWorker(tabId: number, request: T) {
+  async sendInServiceWorker(
+    tabId: number,
+    request: T
+  ): Promise<void | ResponseResult<V>> {
     const response: void | ResponseResult<V> = await chrome.tabs.sendMessage(
       tabId,
       request
@@ -23,7 +26,7 @@ export abstract class BaseMessageSystem<T extends BaseRequest, V> {
    * Send a request from a tab to the service worker
    * @param request the request to handle
    */
-  async sendInTab(request: T) {
+  async sendInTab(request: T): Promise<void | ResponseResult<V>> {
     const response: void | ResponseResult<V> = await chrome.runtime.sendMessage(
       request
     );

@@ -32,6 +32,7 @@ async function copyCommonTemplates(writeDir) {
     ['jest.config.cjs'],
     ['package.json'],
     ['tsconfig.json'],
+    ['README.md'],
     ['src', 'manifest.json'],
   ]) {
     const template = path.resolve(TEMPLATE_DIR, ...file);
