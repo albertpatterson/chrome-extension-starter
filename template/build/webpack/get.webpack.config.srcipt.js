@@ -1,4 +1,5 @@
 import path from 'path';
+import webpack from 'webpack';
 
 function getTsCompilerOptions(isProd) {
   const prodOptions = {
@@ -18,14 +19,27 @@ function getTsCompilerOptions(isProd) {
   return { ...prodOptions, sourceMap: true };
 }
 
-export function getConfig(useJs, isProd, entry, output) {
+function getPlugins(replacements) {
+  const plugins = [];
+  for (const replacement of replacements) {
+    plugins.push(
+      new webpack.NormalModuleReplacementPlugin(replacement[0], replacement[1])
+    );
+  }
+
+  return plugins;
+}
+
+export function getConfig(useJs, isProd, entry, output, replacements) {
   const mode = isProd ? 'production' : 'development';
   const tsCompilerOptions = getTsCompilerOptions(isProd);
+  const plugins = getPlugins(replacements);
 
   const prodConfig = {
     entry,
     output,
     mode,
+    plugins,
     module: {
       rules: [
         {

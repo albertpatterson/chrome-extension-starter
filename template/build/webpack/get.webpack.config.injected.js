@@ -5,9 +5,16 @@ import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const TOP_DIR = path.resolve(__dirname, '..', '..');
+const SRC_DIR = path.resolve(TOP_DIR, 'src');
+const MESSAGE_SYSTEMS_DIR = path.resolve(
+  SRC_DIR,
+  'messaging',
+  'message_systems'
+);
 
 function getContext() {
-  return path.resolve(__dirname, '..', '..', 'src', 'injected');
+  return path.resolve(SRC_DIR, 'injected');
 }
 
 function getEntry(useJs, isProd) {
@@ -25,9 +32,26 @@ export function getConfig(useJs, isProd) {
   const entry = getEntry(useJs, isProd);
   const output = {
     filename: '[name].js',
-    path: path.resolve(__dirname, '..', '..', 'dist', 'unpacked', 'injected'),
+    path: path.resolve(TOP_DIR, 'dist', 'unpacked', 'injected'),
     clean: true,
   };
 
-  return getScriptConfig(useJs, isProd, entry, output);
+  const replacements = [
+    [
+      new RegExp(
+        path.resolve(
+          MESSAGE_SYSTEMS_DIR,
+          '.*',
+          'handle_async_in_service_worker.ts'
+        )
+      ),
+      path.resolve(
+        MESSAGE_SYSTEMS_DIR,
+        'noops',
+        'handle_async_in_service_worker.ts'
+      ),
+    ],
+  ];
+
+  return getScriptConfig(useJs, isProd, entry, output, replacements);
 }
