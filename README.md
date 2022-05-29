@@ -57,7 +57,9 @@ If built in production mode, a zip file will be created to up load to the Web St
 
     - Add the new message system to the list of registered message systems in src/messaging/message_systems.ts
     - Available with typescript template only
-    - Loaded into both the injected scripts and the service worker, so may cause increased package size
+    - At build time the following modules will be replaces with noop modules to avoid bloating the built artifacts with ununsed code
+      - in the injected scripts message_systems/\*/handle_async_in_service_worker.ts -> message_systems/noops/handle_async_in_service_worker.ts
+      - in the service worker message_systems/\*/handle_async_in_tab.ts -> message_systems/noops/handle_async_in_tab.ts
 
 ## License
 
