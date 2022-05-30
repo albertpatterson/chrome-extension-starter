@@ -1,4 +1,4 @@
-import { ResponseResult, isResponseFailure } from './types';
+import { ResponseResult, isResponseFailure } from './framework/types';
 
 export function stringifyResponse<T>(response: ResponseResult<T> | void) {
   if (response) {

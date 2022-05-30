@@ -1,5 +1,6 @@
-export interface BaseRequest {
+export interface Request<T> {
   name: string;
+  data: T;
 }
 
 export interface ResponseSuccess<T> {

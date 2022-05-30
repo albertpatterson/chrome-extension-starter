@@ -1,26 +1,27 @@
-import {
-  SimpleRequest,
-  SimpleData,
-  messageSystem as simpleMessageSystem,
-} from './message_system';
-import { ResponseResult } from '../../types';
-import { create as createSimpleRequest } from './message_system';
+/**
+ * Update this function to contain the logic run in the service worker when this request type is recieved.
+ */
+
+import { messageSystem as simpleMessageSystem } from './message_system';
+import { ResponseResult, Request } from '../../framework/types';
+import { createRequest as createSimpleRequest } from './message_system';
 import { logResponse, stringifyResponse } from '../../util';
+import { SimpleRequestData, SimpleRequestResponseData } from './types';
 
 export async function handleAsyncInServiceWorker(
-  request: SimpleRequest,
+  request: Request<SimpleRequestData>,
   sender: chrome.runtime.MessageSender
-): Promise<ResponseResult<SimpleData>> {
+): Promise<ResponseResult<SimpleRequestResponseData>> {
   console.log(
-    `Handling Simple Request with message "${request.message}" in service worker`
+    `Handling Simple Request with message "${request.data.message}" in service worker`
   );
 
   const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
 
   const activeTab = tabs[0];
 
-  const msg = `Hello from service worker, replying to your request "${request.message}"`;
-  const simpleRequest = createSimpleRequest(msg);
+  const msg = `Hello from service worker, replying to your request "${request.data.message}"`;
+  const simpleRequest = createSimpleRequest({ message: msg });
 
   console.log(`sending simple request in service worker with message"${msg}"`);
   const response = await simpleMessageSystem.sendInServiceWorker(

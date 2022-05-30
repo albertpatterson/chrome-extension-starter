@@ -49,11 +49,17 @@ If built in production mode, a zip file will be created to up load to the Web St
   - <b>util</b>: Utils for use throughout the extension
   - <b>messaging</b>: Simplilfied messaging utils which provide type safety and simplify [Message Passing](https://developer.chrome.com/docs/extensions/mv3/messaging/)
 
-    - To extend this with arbitrary message types, copy the contents of src/messaging/message_systems/simple_request and create the following
+    - To extend the message system with newm, arbitrary types of messages
 
-      - <b>message_system.ts</b>: a message system that facilitates straightforward message passing
-      - <b>handle_async_in_service_worker.ts</b>: defines how the service worker response to a particular type of message
-      - <b>handle_async_in_tab</b>: defines how the the tab response to a particular type of message
+      - copy the contents of src/messaging/message_systems/simple_request and create the following
+        - <b>types.ts</b>: defines the types passed between request and response
+        - <b>handle_async_in_service_worker.ts</b>: defines how the service worker response to a particular type of message
+        - <b>handle_async_in_tab</b>: defines how the the tab response to a particular type of message
+        - <b>message_system.ts</b>: combines the previous modules into a message system that facilitates straightforward message passing. This file likely will not require modification.
+      - Add the new message system in /src/messaging/message_systems/message_systems.ts
+      - Create messages with src/messaging/message_systems/[Request]:createRequest
+      - Send messages in the tab with src/messaging/message_systems/[Request]:sendInTab.
+      - Send messages in the service worker with src/messaging/message_systems/[Request]:sendInServiceWorker.
 
     - Add the new message system to the list of registered message systems in src/messaging/message_systems.ts
     - Available with typescript template only
