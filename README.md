@@ -19,6 +19,10 @@ Create extension resources automatically via npx
   - -i or --install=true to automatically install
   - -y or --yes=true to accept defaults (create in a 'browser_extension" directory with typscript and automatically install)
 
+## Examples
+
+- [Simple Screenshotter](https://github.com/albertpatterson/simple-screenshotter)
+
 ## Development
 
 Once the extension resources are created, the following scripts are available to build the code.
