@@ -1,6 +1,7 @@
 import { getConfig as getBackgroundConfig } from './webpack/get.webpack.config.background.js';
 import { getConfig as getInjectedConfig } from './webpack/get.webpack.config.injected.js';
 import { getConfig as getPopupConfig } from './webpack/get.webpack.config.popup.js';
+import { getConfig as getOptionsConfig } from './webpack/get.webpack.config.options.js';
 import * as tools from 'simple_build_tools';
 import { CONSTANTS } from './constants.js';
 
@@ -10,12 +11,14 @@ const configs = {
   background: getBackgroundConfig(useJs, false),
   injected: getInjectedConfig(useJs, false),
   popup: getPopupConfig(useJs, false),
+  options: getOptionsConfig(useJs, false),
 };
 
 const clean = () => tools.rmrf(CONSTANTS.DIST_DIR);
 const bundleBackground = () => tools.webpack(configs.background);
 const bundleInjected = () => tools.webpack(configs.injected);
 const bundlePopup = () => tools.webpack(configs.popup);
+const bundleOptions = () => tools.webpack(configs.options);
 const copyIcons = () =>
   tools.copyDir(CONSTANTS.ICONS_DIR_SRC, CONSTANTS.ICONS_DIR_DESC);
 const copyManifest = () =>
@@ -39,6 +42,7 @@ export const build = async () =>
         bundleBackground,
         bundleInjected,
         bundlePopup,
+        bundleOptions,
         copyIcons,
         copyManifest,
       ]),

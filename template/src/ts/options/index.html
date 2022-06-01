@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Extension - Options</title>
+    <meta
+      name="description"
+      content="options for a chrome extension created with create-extension"
+    />
+    <meta name="author" content="Albert Patterson" />
+  </head>
+  <body>
+    <div class="form-control">
+      <label for="show-greetings-toggle">Show greetings?</label>
+      <input
+        type="checkbox"
+        name="showGreetings"
+        id="show-greetings-toggle"
+        checked="true"
+        onchange="handleShowGreetingsToggled(this)"
+      />
+    </div>
+  </body>
+</html>

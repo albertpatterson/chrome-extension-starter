@@ -7,13 +7,14 @@
 
   "action": {
     "default_title": "Chrome Extension Starter",
-    "default_popup": "popup/popup.html",
+    "default_popup": "popup/index.html",
     "default_icon": {
       "16": "icon/icon16.png",
       "24": "icon/icon24.png",
       "32": "icon/icon32.png"
     }
   },
+  "options_page": "options/index.html",
   "icons": {
     "16": "icon/icon16.png",
     "48": "icon/icon48.png",

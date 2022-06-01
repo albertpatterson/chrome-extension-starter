@@ -1,4 +1,4 @@
-import '../scss/popup.scss';
+import '../scss/styles.scss';
 
 import { getMessage } from '../../util/message';
 const utilMessage: string = getMessage();
