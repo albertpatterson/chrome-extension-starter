@@ -52,34 +52,6 @@ async function copyCommonTemplates(writeDir) {
   );
 }
 
-async function copyDevBuildFile(useJs, writeDir) {
-  const src = path.resolve(TEMPLATE_DIR, 'build', 'dev.js');
-  const dest = path.resolve(writeDir, 'build', 'dev.js');
-  const transform = (data) => {
-    const langSpecific = useJs
-      ? data.toString().replace('const useJs = false;', 'const useJs = true;')
-      : data;
-
-    return langSpecific;
-  };
-
-  await tools.transformFile(src, dest, transform);
-}
-
-async function copyProdBuildFile(useJs, writeDir) {
-  const src = path.resolve(TEMPLATE_DIR, 'build', 'prod.js');
-  const dest = path.resolve(writeDir, 'build', 'prod.js');
-  const transform = (data) => {
-    const langSpecific = useJs
-      ? data.toString().replace('const useJs = false;', 'const useJs = true;')
-      : data;
-
-    return langSpecific;
-  };
-
-  await tools.transformFile(src, dest, transform);
-}
-
 async function copyJsTemplates(writeDir) {
   await tools.copyDir(
     path.resolve(TEMPLATE_DIR, 'src', 'js'),
@@ -142,11 +114,6 @@ export async function runTasks(config) {
 
   const useJs = Boolean(config.useJs);
 
-  const copyBuildRunners = async () => {
-    await copyProdBuildFile(useJs, writeDir);
-    await copyDevBuildFile(useJs, writeDir);
-  };
-
   const copyTemplagesForLangTitle = useJs
     ? 'Write JS sources'
     : 'Write TS sources';
@@ -162,7 +129,6 @@ export async function runTasks(config) {
       title: 'Write config & build files',
       task: () => copyCommonTemplates(writeDir),
     },
-    { title: 'Write build runners', task: copyBuildRunners },
     { title: copyTemplagesForLangTitle, task: copyTemplatsForLang },
   ];
 

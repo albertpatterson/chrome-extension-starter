@@ -2,7 +2,7 @@ import { __dirname } from './constants.js';
 import path from 'path';
 import { getConfig as getPageConfig } from './get.webpack.config.page.js';
 
-export function getConfig(useJs, isProd) {
+export async function getConfig(isProd) {
   const inputPath = path.resolve(__dirname, '..', '..', 'src', 'options');
   const outputPath = path.resolve(
     __dirname,
@@ -13,5 +13,5 @@ export function getConfig(useJs, isProd) {
     'options'
   );
 
-  return getPageConfig(useJs, isProd, inputPath, outputPath);
+  return await getPageConfig(isProd, inputPath, outputPath);
 }

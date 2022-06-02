@@ -4,20 +4,22 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import { __dirname } from './constants.js';
 import { getTsCompilerOptions } from './utils.js';
+import { getSrcFileWithName } from 'simple_build_tools';
 
-function getEntry(useJs, isProd, inputFolderPath) {
-  const suffix = useJs ? 'js' : 'ts';
+async function getEntry(inputFolderPath) {
+  const scriptDir = path.resolve(inputFolderPath, 'js');
+
+  const indexName = await getSrcFileWithName(scriptDir, 'index');
 
   return {
-    'js/index': path.resolve(inputFolderPath, 'js', `index.${suffix}`),
+    'js/index': path.resolve(inputFolderPath, 'js', indexName),
   };
 }
 
-const createHtmlWebpackPlugin = function (useJs, opts, inputFolderPath) {
+const createHtmlWebpackPlugin = function (opts, inputFolderPath) {
   const config = {
     template: path.resolve(inputFolderPath, 'index.html'),
     filename: 'index.html',
-    excludeAssets: [/(background)|(injected)/],
   };
   if (opts) Object.assign(config, opts);
   return new HtmlWebpackPlugin(config);
@@ -30,7 +32,7 @@ const createSCSSModuleRule = function (cssLoader) {
   };
 };
 
-function getPlugins(useJs, isProd, inputFolderPath) {
+function getPlugins(isProd, inputFolderPath) {
   const plugins = [];
   if (isProd) {
     plugins.push(
@@ -55,7 +57,6 @@ function getPlugins(useJs, isProd, inputFolderPath) {
     : {};
 
   const htmlWebpackPlugin = createHtmlWebpackPlugin(
-    useJs,
     htmlWebpackPluginOptions,
     inputFolderPath
   );
@@ -64,11 +65,11 @@ function getPlugins(useJs, isProd, inputFolderPath) {
   return plugins;
 }
 
-export function getConfig(useJs, isProd, inputFolderPath, outputFolderPath) {
-  const entry = getEntry(useJs, isProd, inputFolderPath);
+export async function getConfig(isProd, inputFolderPath, outputFolderPath) {
+  const entry = await getEntry(inputFolderPath);
   const mode = isProd ? 'production' : 'development';
   const tsCompilerOptions = getTsCompilerOptions(isProd);
-  const plugins = getPlugins(useJs, isProd, inputFolderPath);
+  const plugins = getPlugins(isProd, inputFolderPath);
 
   const scssModuleRule = isProd
     ? createSCSSModuleRule(MiniCssExtractPlugin.loader)

@@ -13,7 +13,7 @@ function getPlugins(replacements) {
   return plugins;
 }
 
-export function getConfig(useJs, isProd, entry, output, replacements) {
+export function getConfig(isProd, entry, output, replacements) {
   const mode = isProd ? 'production' : 'development';
   const tsCompilerOptions = getTsCompilerOptions(isProd);
   const plugins = getPlugins(replacements);

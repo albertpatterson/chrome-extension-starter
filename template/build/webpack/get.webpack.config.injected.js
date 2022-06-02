@@ -2,6 +2,7 @@ import path from 'path';
 import { getConfig as getScriptConfig } from './get.webpack.config.srcipt.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { getDirs, getSrcFileWithName } from 'simple_build_tools';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -17,19 +18,23 @@ function getContext() {
   return path.resolve(SRC_DIR, 'injected');
 }
 
-function getEntry(useJs, isProd) {
+async function getEntry() {
   const context = getContext();
 
-  const suffix = useJs ? 'js' : 'ts';
+  const names = await getDirs(context);
 
-  return {
-    all_pages: path.resolve(context, `all_pages.${suffix}`),
-    home_page: path.resolve(context, `home_page.${suffix}`),
-  };
+  const entry = {};
+  for (const name of names) {
+    const dir = path.resolve(context, name);
+    const indexName = await getSrcFileWithName(dir, 'index');
+    entry[name] = path.resolve(context, name, indexName);
+  }
+
+  return entry;
 }
 
-export function getConfig(useJs, isProd) {
-  const entry = getEntry(useJs, isProd);
+export async function getConfig(isProd) {
+  const entry = await getEntry();
   const output = {
     filename: '[name].js',
     path: path.resolve(TOP_DIR, 'dist', 'unpacked', 'injected'),
@@ -53,5 +58,5 @@ export function getConfig(useJs, isProd) {
     ],
   ];
 
-  return getScriptConfig(useJs, isProd, entry, output, replacements);
+  return getScriptConfig(isProd, entry, output, replacements);
 }

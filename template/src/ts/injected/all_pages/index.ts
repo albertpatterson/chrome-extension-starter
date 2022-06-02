@@ -1,7 +1,7 @@
-import { handleRequestInTab } from '../messaging/framework/message';
-import { logResponse } from '../messaging/util';
-import { createRequest as createSimpleRequest } from '../messaging/message_systems/simple_request/message_system';
-import { messageSystem } from '../messaging/message_systems/simple_request/message_system';
+import { handleRequestInTab } from '../../messaging/framework/message';
+import { logResponse } from '../../messaging/util';
+import { createRequest as createSimpleRequest } from '../../messaging/message_systems/simple_request/message_system';
+import { messageSystem } from '../../messaging/message_systems/simple_request/message_system';
 
 /**
  * handle requests sent via the message system
