@@ -2,7 +2,7 @@ import path from 'path';
 import { getConfig as getScriptConfig } from './get.webpack.config.srcipt.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { getDirs, getSrcFileWithName } from 'simple_build_tools';
+import { getDirs, getFileWithName } from 'simple_build_tools';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,7 +26,7 @@ async function getEntry() {
   const entry = {};
   for (const name of names) {
     const dir = path.resolve(context, name);
-    const indexName = await getSrcFileWithName(dir, 'index');
+    const indexName = await getFileWithName(dir, 'index', ['js', 'ts']);
     entry[name] = path.resolve(context, name, indexName);
   }
 

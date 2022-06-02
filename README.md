@@ -47,9 +47,18 @@ If built in production mode, a zip file will be created to up load to the Web St
 
   - <b>manifest.json</b>: the [Manifest file](https://developer.chrome.com/docs/extensions/mv3/manifest/)
   - <b>background</b>: files that run in the background and compose the [service worker](https://developer.chrome.com/docs/extensions/mv3/service_workers/)
+    - src/background/service_worker.[tj]s is the main file for the service worker
+    - additional files to concatenate with with service worker in dev mode should be placed in src/background/dev_mode_only
+      - currently two files are concatenated in dev mode
+        - chromereload.[tj]s which reloads the extension while running watch
+        - keep_active.[tj]s which keeps the service worker active so that it can be reloaded
+        - additional files added in this directory will be included automatically
   - <b>injected</b>: files that get injected into web pages via [content scripts](https://developer.chrome.com/docs/extensions/mv3/content_scripts/)
+    - Each script should be defined in it's own folder containing an index.[tj]s file. For example the all_pages content script is defined in src/injected/all_pages/index.[tj]s.
+    - New scripts with the same structure will be included automatically.
   - <b>popup</b>: files that build the [popup](https://developer.chrome.com/docs/extensions/reference/action/#popup).
     - Reminder: The action.onClicked event will not be dispatched if the extension action has specified a popup to show on click on the current tab.
+  - <b>options</b>: files that build the [options page](https://developer.chrome.com/docs/extensions/mv3/options/).
   - <b>util</b>: Utils for use throughout the extension
   - <b>messaging</b>: Simplilfied messaging utils which provide type safety and simplify [Message Passing](https://developer.chrome.com/docs/extensions/mv3/messaging/)
 
@@ -70,6 +79,12 @@ If built in production mode, a zip file will be created to up load to the Web St
     - At build time the following modules will be replaces with noop modules to avoid bloating the built artifacts with ununsed code
       - in the injected scripts message_systems/\*/handle_async_in_service_worker.ts -> message_systems/noops/handle_async_in_service_worker.ts
       - in the service worker message_systems/\*/handle_async_in_tab.ts -> message_systems/noops/handle_async_in_tab.ts
+
+- <b>build</b>: The utilities for building the extension from the source files.
+  - Adding new features will likely require some update to the build process or the webpack config
+    - build/webpack/get.webpack.config.script can be used to build scripts, for example it is used for building the content scripts
+    - build/webpack/get.webpack.config.page can be used to build pages, for example it is used for building the popup page.
+    - these should be used as a starting points for new config factories
 
 ## License
 

@@ -4,12 +4,12 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import { __dirname } from './constants.js';
 import { getTsCompilerOptions } from './utils.js';
-import { getSrcFileWithName } from 'simple_build_tools';
+import { getFileWithName } from 'simple_build_tools';
 
 async function getEntry(inputFolderPath) {
   const scriptDir = path.resolve(inputFolderPath, 'js');
 
-  const indexName = await getSrcFileWithName(scriptDir, 'index');
+  const indexName = await getFileWithName(scriptDir, 'index', ['js', 'ts']);
 
   return {
     'js/index': path.resolve(inputFolderPath, 'js', indexName),

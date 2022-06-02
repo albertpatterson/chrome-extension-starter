@@ -2,7 +2,7 @@ import path from 'path';
 import { getConfig as getScriptConfig } from './get.webpack.config.srcipt.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { getFiles, getSrcFileWithName } from 'simple_build_tools';
+import { getFiles, getFileWithName } from 'simple_build_tools';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,7 +31,10 @@ async function getDevModeOnlySrcs() {
 async function getEntry(isProd) {
   const context = getContext();
 
-  const serviceWorkerName = await getSrcFileWithName(context, 'service_worker');
+  const serviceWorkerName = await getFileWithName(context, 'service_worker', [
+    'js',
+    'ts',
+  ]);
 
   const prodEntries = [path.resolve(context, serviceWorkerName)];
 
