@@ -8,6 +8,16 @@
 
 It facilitates fast setup, rapid development, and creation of optimized assets for deployment - ideal for developing complex extensions. This project also offers file watching and automatic reloading to narrow development cycles. It utilized many familiar tools for web development (Webpack, Babel, Typescript etc) to create unpacked assets for local development as well as a zip file for deployment to the web store.
 
+## Author
+
+[Albert Patterson](mailto:albert.patterson.code@gmail.com)
+
+- [Linkedin](https://www.linkedin.com/in/apattersoncmu/)
+- [Github](https://github.com/albertpatterson)
+- [npm](https://www.npmjs.com/~apatterson189)
+- [Youtube](https://www.youtube.com/channel/UCrECEffgWKBMCvn5tar9bYw)
+- [Medium](https://medium.com/@albert.patterson.code)
+
 ## Usage
 
 Create extension resources automatically via npx
@@ -22,6 +32,7 @@ Create extension resources automatically via npx
 ## Examples
 
 - [Simple Screenshotter](https://github.com/albertpatterson/simple-screenshotter)
+- [Actions](https://github.com/albertpatterson/actions)
 
 ## Development
 

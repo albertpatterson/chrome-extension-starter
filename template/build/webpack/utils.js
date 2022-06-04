@@ -23,6 +23,7 @@ export function getTsCompilerOptions(isProd) {
     jsx: 'react',
     allowJs: true,
     moduleResolution: 'node',
+    strictNullChecks: true,
   };
 
   if (isProd) {
