@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Chrome-Extension-Starter",
-  "version": "1.0.0",
+  "version": "1.0.1",
 
   "description": "The next great extension to take the Web Store by storm - Built with Chrome-Extension-Starter.",
 
