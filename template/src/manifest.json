@@ -1,12 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "Chrome-Extension-Starter",
-  "version": "1.0.1",
+  "name": "create-extension template",
+  "version": "1.0.0",
 
-  "description": "The next great extension to take the Web Store by storm - Built with Chrome-Extension-Starter.",
+  "description": "The next great extension to take the Web Store by storm - Built with create-extension.",
 
   "action": {
-    "default_title": "Chrome Extension Starter",
+    "default_title": "create-extension template",
     "default_popup": "popup/index.html",
     "default_icon": {
       "16": "icon/icon16.png",
