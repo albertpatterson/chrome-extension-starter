@@ -1,6 +1,6 @@
 {
   "name": "create-extension",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Create a browser extension.",
   "main": "index.js",
   "scripts": {
@@ -16,9 +16,9 @@
   "author": "Albert Patterson",
   "repository": {
     "type": "git",
-    "url": "https://github.com/albertpatterson/chrome-extension-starter"
+    "url": "https://github.com/albertpatterson/create-extension"
   },
-  "license": "MIT",
+  "license": "GPL-3.0",
   "type": "module",
   "dependencies": {
     "arg": "^5.0.1",

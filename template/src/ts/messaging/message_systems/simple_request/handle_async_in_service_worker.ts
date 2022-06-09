@@ -40,10 +40,13 @@ export async function handleAsyncInServiceWorker(
   const simpleRequest = createSimpleRequest({ message: msg });
 
   console.log(`sending simple request in service worker with message"${msg}"`);
-  const response = await simpleMessageSystem.sendInServiceWorker(
-    activeTab.id,
-    simpleRequest
-  );
+  const response =
+    activeTab.id === undefined
+      ? { succeeded: false, data: { simpleDataString: 'no active tab id' } }
+      : await simpleMessageSystem.sendInServiceWorker(
+          activeTab.id,
+          simpleRequest
+        );
 
   logResponse(response);
 

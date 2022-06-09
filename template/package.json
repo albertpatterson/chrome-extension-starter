@@ -1,7 +1,7 @@
 {
-  "name": "chrome-extension-starter",
+  "name": "made_with_create-extension",
   "version": "1.0.0",
-  "description": "A starter project for a Chrome browser extension",
+  "description": "A browser extension made with create-extension",
   "main": "index.js",
   "scripts": {
     "build": "node build/prod -r",
@@ -14,9 +14,9 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/albertpatterson/chrome-extension-starter"
+    "url": "https://github.com/albertpatterson/create-extension"
   },
-  "license": "MIT",
+  "license": "GPL-3.0",
   "dependencies": {
     "@babel/preset-env": "^7.17.10",
     "@babel/preset-typescript": "^7.16.7",
