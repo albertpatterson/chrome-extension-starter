@@ -1,6 +1,6 @@
 {
   "name": "create-extension",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Create a browser extension.",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,7 @@
     "inquirer": "^8.2.4",
     "listr2": "^4.0.5",
     "rimraf": "^3.0.2",
-    "simple_build_tools": "^1.0.0"
+    "simple_build_tools": "^1.0.3"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.188",
