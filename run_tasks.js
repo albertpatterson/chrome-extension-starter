@@ -42,10 +42,12 @@ async function setup(writeDir) {
   await tryMkdir(getSrcPath(writeDir));
 }
 
+const EXCLUDED_COMMON_FILES = ['dotgitignore'];
+
 async function copyCommonTemplates(writeDir) {
-  const commonFiles = await (
-    await tools.getFiles(TEMPLATE_DIR)
-  ).map((f) => [f]);
+  const commonFiles = await (await tools.getFiles(TEMPLATE_DIR))
+    .filter((f) => !EXCLUDED_COMMON_FILES.includes(f))
+    .map((f) => [f]);
 
   const allFiles = [...commonFiles, ['src', 'manifest.json']];
 
@@ -103,7 +105,7 @@ async function npmInstall(ctx, task, writeDir) {
 }
 
 async function gitInit(writeDir) {
-  const template = path.resolve(TEMPLATE_DIR, '.gitignore');
+  const template = path.resolve(TEMPLATE_DIR, 'dotgitignore');
   const out = path.resolve(writeDir, '.gitignore');
 
   await tools.copyFile(template, out);
