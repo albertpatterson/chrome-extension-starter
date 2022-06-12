@@ -31,7 +31,7 @@ Create extension resources automatically via npx
 
 ## Examples
 
-- [Simple Screenshotter](https://github.com/albertpatterson/simple-screenshotter)
+- [Simple Screenshotter](https://chrome.google.com/webstore/detail/simple-screenshotter/oaohcnlnpoacmghhhhbkamngdodophbj?hl=en&authuser=0)
 - [Actions](https://github.com/albertpatterson/actions)
 
 ## Development
