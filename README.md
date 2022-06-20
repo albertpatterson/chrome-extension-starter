@@ -33,6 +33,7 @@ Create extension resources automatically via npx
 
 - [Simple Screenshotter](https://chrome.google.com/webstore/detail/simple-screenshotter/oaohcnlnpoacmghhhhbkamngdodophbj?hl=en&authuser=0)
 - [Actions](https://github.com/albertpatterson/actions)
+- [Youtube Recommendations Scraper](https://github.com/albertpatterson/youtube-recommendations-scraper)
 
 ## Development
 
