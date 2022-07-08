@@ -35,13 +35,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
  */
 (async () => {
   const msg = `page with title "${document.title}" loaded!`;
-  console.log(`sending simple request in tab with message "${msg}"`);
+  console.log(
+    `sending simple request in tab (to service worker) with message "${msg}"`
+  );
   const result = await simpleRequestSystem.sendRequestToServiceWorker(
     createSimpleRequest({ message: msg })
   );
+  console.log('received response (from service worker):');
   logResponse(result);
-
-  if (result) {
-    console.log(result.data.simpleDataString);
-  }
 })();

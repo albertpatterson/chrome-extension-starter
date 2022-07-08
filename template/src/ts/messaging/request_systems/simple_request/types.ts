@@ -32,5 +32,6 @@ export interface SimpleRequestData {
  * The type of data passed with the response
  */
 export interface SimpleResponseData {
-  simpleDataString: string;
+  simpleDataString?: string;
+  error?: string;
 }

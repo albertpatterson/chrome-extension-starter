@@ -33,18 +33,30 @@ export async function handleAsyncInServiceWorker(
   );
 
   const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-
   const activeTab = tabs[0];
+  const activeTabId = activeTab?.id;
+
+  if (activeTabId === undefined) {
+    return {
+      succeeded: false,
+      data: {
+        error: 'active tab not found.',
+      },
+    };
+  }
 
   const msg = `Hello from service worker, replying to your request "${request.data.message}"`;
   const simpleRequest = createSimpleRequest({ message: msg });
 
-  console.log(`sending simple request in service worker with message"${msg}"`);
-  const response =
-    activeTab.id === undefined
-      ? { succeeded: false, data: { simpleDataString: 'no active tab id' } }
-      : await simpleRequestSystem.sendRequestToTab(activeTab.id, simpleRequest);
+  console.log(
+    `sending simple request in service worker (to active tab) with message"${msg}"`
+  );
+  const response = await simpleRequestSystem.sendRequestToTab(
+    activeTabId,
+    simpleRequest
+  );
 
+  console.log('received response (from active tab):');
   logResponse(response);
 
   const data = {
