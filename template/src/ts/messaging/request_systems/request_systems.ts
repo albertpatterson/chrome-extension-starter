@@ -14,11 +14,14 @@
  * be preserved. Contributors provide an express grant of patent rights.
  */
 
-import { Request, ResponseResult } from '../../framework/types';
+/**
+ * Register request systems here
+ */
 
-export async function handleAsyncInTab(
-  request: Request<{}>,
-  sender: chrome.runtime.MessageSender
-): Promise<ResponseResult<{}>> {
-  throw new Error('noop handleAsyncInTab called');
-}
+import { BaseRequestSystem } from '../framework/base_request_system';
+import { simpleRequestSystem } from './simple_request/request_system';
+
+export const requestSystems: Array<BaseRequestSystem<{}, {}>> = [
+  simpleRequestSystem,
+  // Add new request systems here
+];

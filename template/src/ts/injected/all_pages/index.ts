@@ -14,10 +14,12 @@
  * be preserved. Contributors provide an express grant of patent rights.
  */
 
-import { handleRequestInTab } from '../../messaging/framework/message';
+import { handleRequestInTab } from '../../messaging/framework/handle_request';
 import { logResponse } from '../../messaging/util';
-import { createRequest as createSimpleRequest } from '../../messaging/message_systems/simple_request/message_system';
-import { messageSystem } from '../../messaging/message_systems/simple_request/message_system';
+import {
+  simpleRequestSystem,
+  createSimpleRequest,
+} from '../../messaging/request_systems/simple_request/request_system';
 
 /**
  * handle requests sent via the message system
@@ -34,7 +36,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 (async () => {
   const msg = `page with title "${document.title}" loaded!`;
   console.log(`sending simple request in tab with message "${msg}"`);
-  const result = await messageSystem.sendInTab(
+  const result = await simpleRequestSystem.sendRequestToServiceWorker(
     createSimpleRequest({ message: msg })
   );
   logResponse(result);

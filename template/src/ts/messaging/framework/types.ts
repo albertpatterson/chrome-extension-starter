@@ -19,26 +19,28 @@ export interface Request<T> {
   data: T;
 }
 
-export interface ResponseSuccess<T> {
+interface ResponseBase<T> {
+  data: T;
+}
+
+export interface ResponseSuccess<T> extends ResponseBase<T> {
   succeeded: true;
-  data: T;
 }
 
-export interface ResponseFailure<T> {
+export interface ResponseFailure<T> extends ResponseBase<T> {
   succeeded: false;
-  data: T;
 }
 
-export type ResponseResult<T> = ResponseSuccess<T> | ResponseFailure<T>;
+export type Response<T> = ResponseSuccess<T> | ResponseFailure<T>;
 
 export function isResponseSuccess<T>(
-  result: ResponseResult<T>
-): result is ResponseSuccess<T> {
-  return result.succeeded;
+  response: Response<T>
+): response is ResponseSuccess<T> {
+  return response.succeeded;
 }
 
 export function isResponseFailure<T>(
-  result: ResponseResult<T>
-): result is ResponseFailure<T> {
-  return !result.succeeded;
+  response: Response<T>
+): response is ResponseFailure<T> {
+  return !response.succeeded;
 }

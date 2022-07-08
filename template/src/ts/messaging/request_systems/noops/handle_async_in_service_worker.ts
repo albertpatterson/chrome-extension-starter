@@ -14,14 +14,11 @@
  * be preserved. Contributors provide an express grant of patent rights.
  */
 
-/**
- * Register message systems here
- */
+import { Request, Response } from '../../framework/types';
 
-import { BaseMessageSystem } from '../framework/base_message_system';
-import { messageSystem as simpleMessageSystem } from './simple_request/message_system';
-
-export const messageSystems: Array<BaseMessageSystem<{}, {}>> = [
-  simpleMessageSystem,
-  // Add new message systems here
-];
+export async function handleAsyncInServiceWorker(
+  request: Request<{}>,
+  sender: chrome.runtime.MessageSender
+): Promise<Response<{}>> {
+  throw new Error('noop handleAsyncInServiceWorker called');
+}

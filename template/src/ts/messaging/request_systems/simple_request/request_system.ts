@@ -14,11 +14,16 @@
  * be preserved. Contributors provide an express grant of patent rights.
  */
 
-import { Request, ResponseResult } from '../../framework/types';
+/**
+ * This module should not need to be updated for new request types
+ */
 
-export async function handleAsyncInServiceWorker(
-  request: Request<{}>,
-  sender: chrome.runtime.MessageSender
-): Promise<ResponseResult<{}>> {
-  throw new Error('noop handleAsyncInServiceWorker called');
-}
+import { createRequestSystem } from '../../framework/base_request_system';
+import { handleAsyncInTab } from './handle_async_in_tab';
+import { handleAsyncInServiceWorker } from './handle_async_in_service_worker';
+import { NAME } from './types';
+
+export const {
+  requestSystem: simpleRequestSystem,
+  createRequest: createSimpleRequest,
+} = createRequestSystem(NAME, handleAsyncInTab, handleAsyncInServiceWorker);

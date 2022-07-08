@@ -14,9 +14,9 @@
  * be preserved. Contributors provide an express grant of patent rights.
  */
 
-import { ResponseResult, isResponseFailure } from './framework/types';
+import { Response, isResponseFailure } from './framework/types';
 
-export function stringifyResponse<T>(response: ResponseResult<T> | void) {
+export function stringifyResponse<T>(response: Response<T> | void) {
   if (response) {
     const stringified = JSON.stringify(response.data);
     if (isResponseFailure(response)) {
@@ -29,6 +29,6 @@ export function stringifyResponse<T>(response: ResponseResult<T> | void) {
   }
 }
 
-export function logResponse<T>(response: ResponseResult<T> | void) {
+export function logResponse<T>(response: Response<T> | void) {
   console.log(stringifyResponse(response));
 }

@@ -18,13 +18,13 @@
  * Update this function to contain the logic run in the tab when this request type is recieved.
  */
 
-import { SimpleRequestData, SimpleRequestResponseData } from './types';
-import { Request, ResponseResult } from '../../framework/types';
+import { SimpleRequestData, SimpleResponseData } from './types';
+import { Request, Response } from '../../framework/types';
 
 export async function handleAsyncInTab(
   request: Request<SimpleRequestData>,
   sender: chrome.runtime.MessageSender
-): Promise<ResponseResult<SimpleRequestResponseData>> {
+): Promise<Response<SimpleResponseData>> {
   console.log(
     `Handled Simple Request with message "${request.data.message}" on tab with title "${document.title}"`
   );

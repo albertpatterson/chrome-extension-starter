@@ -14,24 +14,24 @@
  * be preserved. Contributors provide an express grant of patent rights.
  */
 
-import { Request, ResponseResult } from './types';
+import { Request, Response } from './types';
 
 /**
  * Handle requests from the service worker to a browser tab
  *  T: request data type
  *  V: response data type
  */
-export abstract class BaseMessageSystem<T, V> {
+export abstract class BaseRequestSystem<T, V> {
   /**
    * Send a request from the service worker to a tab
    * @param tabId the id of the tab to receive the message
    * @param request the request to handle
    */
-  async sendInServiceWorker(
+  async sendRequestToTab(
     tabId: number,
     request: Request<T>
-  ): Promise<void | ResponseResult<V>> {
-    const response: void | ResponseResult<V> = await chrome.tabs.sendMessage(
+  ): Promise<void | Response<V>> {
+    const response: void | Response<V> = await chrome.tabs.sendMessage(
       tabId,
       request
     );
@@ -43,8 +43,10 @@ export abstract class BaseMessageSystem<T, V> {
    * Send a request from a tab to the service worker
    * @param request the request to handle
    */
-  async sendInTab(request: Request<T>): Promise<void | ResponseResult<V>> {
-    const response: void | ResponseResult<V> = await chrome.runtime.sendMessage(
+  async sendRequestToServiceWorker(
+    request: Request<T>
+  ): Promise<void | Response<V>> {
+    const response: void | Response<V> = await chrome.runtime.sendMessage(
       request
     );
 
@@ -97,7 +99,7 @@ export abstract class BaseMessageSystem<T, V> {
   protected abstract handleAsyncInTab(
     request: Request<T>,
     sender: chrome.runtime.MessageSender
-  ): Promise<void | ResponseResult<V>>;
+  ): Promise<void | Response<V>>;
 
   /**
    * asynchronousely handle the request in the service worker, must be overriden in subclasses
@@ -107,7 +109,7 @@ export abstract class BaseMessageSystem<T, V> {
   protected abstract handleAsyncInServiceWorker(
     request: Request<T>,
     sender: chrome.runtime.MessageSender
-  ): Promise<void | ResponseResult<V>>;
+  ): Promise<void | Response<V>>;
 }
 
 /**
@@ -117,18 +119,18 @@ export abstract class BaseMessageSystem<T, V> {
  * @param handleAsyncInServiceWorker handler of requests in the service worker
  * @returns
  */
-export function createMessageSystem<T, V>(
+export function createRequestSystem<T, V>(
   name: string,
   handleAsyncInTab: (
     request: Request<T>,
     sender: chrome.runtime.MessageSender
-  ) => Promise<ResponseResult<V>>,
+  ) => Promise<Response<V>>,
   handleAsyncInServiceWorker: (
     request: Request<T>,
     sender: chrome.runtime.MessageSender
-  ) => Promise<ResponseResult<V>>
+  ) => Promise<Response<V>>
 ) {
-  class MessageSystem extends BaseMessageSystem<T, V> {
+  class RequestSystem extends BaseRequestSystem<T, V> {
     canHandle(request: Request<{}>): request is Request<T> {
       return request.name === name;
     }
@@ -136,19 +138,19 @@ export function createMessageSystem<T, V>(
     protected async handleAsyncInTab(
       request: Request<T>,
       sender: chrome.runtime.MessageSender
-    ): Promise<ResponseResult<V>> {
+    ): Promise<Response<V>> {
       return await handleAsyncInTab(request, sender);
     }
 
     protected async handleAsyncInServiceWorker(
       request: Request<T>,
       sender: chrome.runtime.MessageSender
-    ): Promise<ResponseResult<V>> {
+    ): Promise<Response<V>> {
       return await handleAsyncInServiceWorker(request, sender);
     }
   }
 
-  const messageSystem = new MessageSystem();
+  const requestSystem = new RequestSystem();
 
   const createRequest = (params: T): Request<T> => {
     return {
@@ -160,7 +162,7 @@ export function createMessageSystem<T, V>(
   };
 
   return {
-    messageSystem,
+    requestSystem,
     createRequest,
   };
 }

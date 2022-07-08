@@ -14,7 +14,7 @@
  * be preserved. Contributors provide an express grant of patent rights.
  */
 
-import { handleRequestInServiceWorker } from '../messaging/framework/message';
+import { handleRequestInServiceWorker } from '../messaging/framework/handle_request';
 
 /**
  * handle requests sent via the message system

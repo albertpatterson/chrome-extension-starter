@@ -18,16 +18,16 @@
  * Update this function to contain the logic run in the service worker when this request type is recieved.
  */
 
-import { messageSystem as simpleMessageSystem } from './message_system';
-import { ResponseResult, Request } from '../../framework/types';
-import { createRequest as createSimpleRequest } from './message_system';
+import { simpleRequestSystem } from './request_system';
+import { Response, Request } from '../../framework/types';
+import { createSimpleRequest } from './request_system';
 import { logResponse, stringifyResponse } from '../../util';
-import { SimpleRequestData, SimpleRequestResponseData } from './types';
+import { SimpleRequestData, SimpleResponseData } from './types';
 
 export async function handleAsyncInServiceWorker(
   request: Request<SimpleRequestData>,
   sender: chrome.runtime.MessageSender
-): Promise<ResponseResult<SimpleRequestResponseData>> {
+): Promise<Response<SimpleResponseData>> {
   console.log(
     `Handling Simple Request with message "${request.data.message}" in service worker`
   );
@@ -43,10 +43,7 @@ export async function handleAsyncInServiceWorker(
   const response =
     activeTab.id === undefined
       ? { succeeded: false, data: { simpleDataString: 'no active tab id' } }
-      : await simpleMessageSystem.sendInServiceWorker(
-          activeTab.id,
-          simpleRequest
-        );
+      : await simpleRequestSystem.sendRequestToTab(activeTab.id, simpleRequest);
 
   logResponse(response);
 
