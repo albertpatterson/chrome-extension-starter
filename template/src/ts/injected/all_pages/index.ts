@@ -19,7 +19,7 @@ import { logResponse } from '../../messaging/util';
 import {
   simpleRequestSystem,
   createSimpleRequest,
-} from '../../messaging/request_systems/simple_request/request_system';
+} from '../../messaging/request_systems/simple_request';
 
 /**
  * handle requests sent via the message system

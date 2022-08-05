@@ -15,17 +15,17 @@
  */
 
 import { Request } from './types';
-import { requestSystems } from '../request_systems/request_systems';
+import { requestSystemManager } from './registry';
+import '../request_systems';
 
 export function handleRequestInTab<T>(
   request: Request<T>,
   sender: chrome.runtime.MessageSender,
   sendResponse: (r: any) => void
 ): boolean {
-  for (const requestSystem of requestSystems) {
-    if (requestSystem.canHandle(request)) {
-      return requestSystem.handle(request, sender, sendResponse, true);
-    }
+  const handler = requestSystemManager.get(request);
+  if (handler) {
+    return handler.handle(request, sender, sendResponse, true);
   }
 
   sendResponse({ succeeded: false, data: 'no handler registered' });
@@ -37,10 +37,9 @@ export function handleRequestInServiceWorker<T>(
   sender: chrome.runtime.MessageSender,
   sendResponse: (r: any) => void
 ): boolean {
-  for (const requestSystem of requestSystems) {
-    if (requestSystem.canHandle(request)) {
-      return requestSystem.handle(request, sender, sendResponse, false);
-    }
+  const handler = requestSystemManager.get(request);
+  if (handler) {
+    return handler.handle(request, sender, sendResponse, true);
   }
 
   sendResponse({ succeeded: false, data: 'no handler registered' });

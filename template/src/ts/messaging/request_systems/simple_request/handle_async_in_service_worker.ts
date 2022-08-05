@@ -18,9 +18,9 @@
  * Update this function to contain the logic run in the service worker when this request type is recieved.
  */
 
-import { simpleRequestSystem } from './request_system';
+import { simpleRequestSystem } from '.';
 import { Response, Request } from '../../framework/types';
-import { createSimpleRequest } from './request_system';
+import { createSimpleRequest } from '.';
 import { logResponse, stringifyResponse } from '../../util';
 import { SimpleRequestData, SimpleResponseData } from './types';
 

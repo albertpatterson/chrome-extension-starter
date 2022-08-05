@@ -18,7 +18,7 @@
  * This module should not need to be updated for new request types
  */
 
-import { createRequestSystem } from '../../framework/base_request_system';
+import { createAndRegisterRequestSystem } from '../../framework/initiation';
 import { handleAsyncInTab } from './handle_async_in_tab';
 import { handleAsyncInServiceWorker } from './handle_async_in_service_worker';
 import { NAME } from './types';
@@ -26,4 +26,8 @@ import { NAME } from './types';
 export const {
   requestSystem: simpleRequestSystem,
   createRequest: createSimpleRequest,
-} = createRequestSystem(NAME, handleAsyncInTab, handleAsyncInServiceWorker);
+} = createAndRegisterRequestSystem(
+  NAME,
+  handleAsyncInTab,
+  handleAsyncInServiceWorker
+);
