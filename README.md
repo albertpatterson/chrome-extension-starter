@@ -76,21 +76,20 @@ If built in production mode, a zip file will be created to up load to the Web St
 
     - To extend the message system with newm, arbitrary types of messages
 
-      - copy the contents of src/messaging/message_systems/simple_request and create the following
+      - copy the contents of src/messaging/request_systems/simple_request and create the following
         - <b>types.ts</b>: defines the types passed between request and response
         - <b>handle_async_in_service_worker.ts</b>: defines how the service worker response to a particular type of message
         - <b>handle_async_in_tab</b>: defines how the the tab response to a particular type of message
-        - <b>message_system.ts</b>: combines the previous modules into a message system that facilitates straightforward message passing. This file likely will not require modification.
-      - Add the new message system in /src/messaging/message_systems/message_systems.ts
-      - Create messages with src/messaging/message_systems/[Request]:createRequest
-      - Send messages in the tab with src/messaging/message_systems/[Request]:sendInTab.
-      - Send messages in the service worker with src/messaging/message_systems/[Request]:sendInServiceWorker.
+        - <b>index.ts</b>: combines the previous modules into a message system that facilitates straightforward message passing. The new message system must be registered in order to be included, which can be accomplished easily via the createAndRegisterRequestSystem method
+      - import the file containing the message system in /src/messaging/request_systems/index.ts so that it will be included in the build.
+      - Create messages with src/messaging/request_systems/[Request]:createRequest
+      - Send messages in the tab with src/messaging/request_systems/[Request]:sendRequestToTab.
+      - Send messages in the service worker with src/messaging/request_systems/[Request]:sendRequestToServiceWorker.
 
-    - Add the new message system to the list of registered message systems in src/messaging/message_systems.ts
     - Available with typescript template only
     - At build time the following modules will be replaces with noop modules to avoid bloating the built artifacts with ununsed code
-      - in the injected scripts message_systems/\*/handle_async_in_service_worker.ts -> message_systems/noops/handle_async_in_service_worker.ts
-      - in the service worker message_systems/\*/handle_async_in_tab.ts -> message_systems/noops/handle_async_in_tab.ts
+      - in the injected scripts request_systems/\*/handle_async_in_service_worker.ts -> request_systems/noops/handle_async_in_service_worker.ts
+      - in the service worker request_systems/\*/handle_async_in_tab.ts -> request_systems/noops/handle_async_in_tab.ts
 
 - <b>build</b>: The utilities for building the extension from the source files.
   - Adding new features will likely require some update to the build process or the webpack config

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "try-build": "rm -rf ./tested; node ./index.js ./tested -y"
+    "try-build": "rm -rf ./tested; node ./index.js -y tested; cd tested; npm run build-dev"
   },
   "bin": "./index.js",
   "keywords": [

@@ -39,7 +39,7 @@ export function handleRequestInServiceWorker<T>(
 ): boolean {
   const handler = requestSystemManager.get(request);
   if (handler) {
-    return handler.handle(request, sender, sendResponse, true);
+    return handler.handle(request, sender, sendResponse, false);
   }
 
   sendResponse({ succeeded: false, data: 'no handler registered' });
