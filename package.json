@@ -1,6 +1,6 @@
 {
   "name": "create-extension",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Create a browser extension.",
   "main": "index.js",
   "scripts": {
