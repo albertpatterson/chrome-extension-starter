@@ -46,13 +46,19 @@ async function getInitialSettings(rawArgs) {
   const args = arg(
     {
       '--javascript': Boolean,
+      '--typescript': Boolean,
       '--yes': Boolean,
       '--install': Boolean,
+      '--skip-install': Boolean,
       '--git': Boolean,
+      '--skip-git': Boolean,
       '-j': '--javascript',
+      '-t': '--typescript',
       '-y': '--yes',
       '-i': '--install',
+      '-I': '--skip-install',
       '-g': '--git',
+      '-G': '--skip-git',
     },
     { argv: rawArgs.slice(2) }
   );
@@ -62,11 +68,15 @@ async function getInitialSettings(rawArgs) {
   const providedWriteDirName = args._[0];
   const writeDir = getWriteDir(providedWriteDirName, skipPrompts);
 
+  const useJs = getBooleanForArg(args, '--javascript', '--typescript');
+  const install = getBooleanForArg(args, '--install', '--skip-install');
+  const initGit = getBooleanForArg(args, '--git', '--skip-git');
+
   const initialSettings = {
     writeDir,
-    useJs: args['--javascript'] || (skipPrompts ? false : undefined),
-    install: args['--install'] || (skipPrompts ? true : undefined),
-    git: args['--git'] || (skipPrompts ? true : undefined),
+    useJs: useJs ?? (skipPrompts ? false : undefined),
+    install: install ?? (skipPrompts ? true : undefined),
+    git: initGit ?? (skipPrompts ? true : undefined),
   };
 
   const questions = [];
@@ -158,5 +168,13 @@ export async function getSettings(rawArgs) {
     } else {
       initialSettings = await getInitialSettings([]);
     }
+  }
+}
+
+function getBooleanForArg(args, argTrue, argFalse) {
+  if (args[argTrue]) {
+    return true;
+  } else if (args[argFalse]) {
+    return false;
   }
 }

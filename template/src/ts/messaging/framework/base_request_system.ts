@@ -54,7 +54,7 @@ export abstract class BaseRequestSystem<T, V> {
   }
 
   /** Can this message system handle this type of request? */
-  abstract canHandle(request: Request<{}>): request is Request<T>;
+  abstract canHandle(request: Request<{}>): boolean;
 
   /**
    * Synchronousely initiate the request handling in the tab and indicate that the response will be sent asynchronously

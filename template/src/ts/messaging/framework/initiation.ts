@@ -20,7 +20,7 @@ export function createRequestSystem<T, V>(
   ) => Promise<Response<V>>
 ) {
   class RequestSystem extends BaseRequestSystem<T, V> {
-    canHandle(request: Request<{}>): request is Request<T> {
+    canHandle(request: Request<{}>): boolean {
       return request.name === name;
     }
 
