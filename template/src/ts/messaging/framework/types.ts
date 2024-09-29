@@ -14,32 +14,32 @@
  * be preserved. Contributors provide an express grant of patent rights.
  */
 
-export interface Request<T> {
+export interface Request<T extends {}> {
   name: string;
   data: T;
 }
 
-interface ResponseBase<T> {
+interface ResponseBase<T extends {}> {
   data: T;
 }
 
-export interface ResponseSuccess<T> extends ResponseBase<T> {
+export interface ResponseSuccess<T extends {}> extends ResponseBase<T> {
   succeeded: true;
 }
 
-export interface ResponseFailure<T> extends ResponseBase<T> {
+export interface ResponseFailure<T extends {}> extends ResponseBase<T> {
   succeeded: false;
 }
 
-export type Response<T> = ResponseSuccess<T> | ResponseFailure<T>;
+export type Response<T extends {}> = ResponseSuccess<T> | ResponseFailure<T>;
 
-export function isResponseSuccess<T>(
+export function isResponseSuccess<T extends {}>(
   response: Response<T>
 ): response is ResponseSuccess<T> {
   return response.succeeded;
 }
 
-export function isResponseFailure<T>(
+export function isResponseFailure<T extends {}>(
   response: Response<T>
 ): response is ResponseFailure<T> {
   return !response.succeeded;

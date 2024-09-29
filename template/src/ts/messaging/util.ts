@@ -16,7 +16,7 @@
 
 import { Response, isResponseFailure } from './framework/types';
 
-export function stringifyResponse<T>(response: Response<T> | void) {
+export function stringifyResponse<T extends {}>(response: Response<T> | void) {
   if (response) {
     const stringified = JSON.stringify(response.data);
     if (isResponseFailure(response)) {
@@ -29,6 +29,6 @@ export function stringifyResponse<T>(response: Response<T> | void) {
   }
 }
 
-export function logResponse<T>(response: Response<T> | void) {
+export function logResponse<T extends {}>(response: Response<T> | void) {
   console.log(stringifyResponse(response));
 }

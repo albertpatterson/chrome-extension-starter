@@ -8,7 +8,9 @@ class RequestSystemManager {
     this.requestSystems.push(requestSystem);
   }
 
-  get<T>(request: Request<T>): BaseRequestSystem<{}, {}> | undefined {
+  get<T extends {}>(
+    request: Request<T>
+  ): BaseRequestSystem<{}, {}> | undefined {
     for (const requestSystem of this.requestSystems) {
       if (requestSystem.canHandle(request)) {
         return requestSystem;

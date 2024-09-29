@@ -18,7 +18,7 @@ import { Request } from './types';
 import { requestSystemManager } from './registry';
 import '../request_systems';
 
-export function handleRequestInTab<T>(
+export function handleRequestInTab<T extends {}>(
   request: Request<T>,
   sender: chrome.runtime.MessageSender,
   sendResponse: (r: any) => void
@@ -32,7 +32,7 @@ export function handleRequestInTab<T>(
   return false;
 }
 
-export function handleRequestInServiceWorker<T>(
+export function handleRequestInServiceWorker<T extends {}>(
   request: Request<T>,
   sender: chrome.runtime.MessageSender,
   sendResponse: (r: any) => void

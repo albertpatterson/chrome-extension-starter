@@ -8,7 +8,7 @@ import { requestSystemManager } from './registry';
  * @param handleAsyncInServiceWorker handler of requests in the service worker
  * @returns
  */
-export function createRequestSystem<T, V>(
+export function createRequestSystem<T extends {}, V extends {}>(
   name: string,
   handleAsyncInTab: (
     request: Request<T>,
@@ -69,7 +69,7 @@ export function registerRequestSystem(
  * @param handleAsyncInServiceWorker handler of requests in the service worker
  * @returns
  */
-export function createAndRegisterRequestSystem<T, V>(
+export function createAndRegisterRequestSystem<T extends {}, V extends {}>(
   name: string,
   handleAsyncInTab: (
     request: Request<T>,

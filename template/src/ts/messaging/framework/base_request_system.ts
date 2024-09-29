@@ -21,7 +21,7 @@ import { Request, Response } from './types';
  *  T: request data type
  *  V: response data type
  */
-export abstract class BaseRequestSystem<T, V> {
+export abstract class BaseRequestSystem<T extends {}, V  extends {}> {
   /**
    * Send a request from the service worker to a tab
    * @param tabId the id of the tab to receive the message
